@@ -6,20 +6,21 @@ import com.professionalbeginner.domain.ddd.ValueObject;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Kempenich Florian
  */
 public class BookId implements ValueObject<BookId> {
 
-    private String id;
+    private Long id;
 
-    public static final BookId NOT_ASSIGNED = new BookId("-1");
+    public static final BookId NOT_ASSIGNED = new BookId();
+    private BookId() {
+        this.id = -1L;
+    }
 
-    public BookId(String id) {
-        checkNotNull(id);
-        checkArgument(!id.isEmpty(), "Id cannot be empty");
+    public BookId(Long id) {
+        checkArgument(id > 0, "Id cannot be <= 0");
         this.id = id;
     }
 
@@ -41,14 +42,14 @@ public class BookId implements ValueObject<BookId> {
         return Objects.equals(id, other.id);
     }
 
-    public String idString() {
-        return id;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .toString();
+    }
+
+    public long idLong() {
+        return id;
     }
 }

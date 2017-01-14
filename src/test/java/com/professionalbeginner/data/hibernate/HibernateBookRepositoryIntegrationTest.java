@@ -13,9 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Kempenich Florian
@@ -65,12 +63,6 @@ public class HibernateBookRepositoryIntegrationTest {
 
         assertEquals(originalPrice, fromRepo.price());
         assertEquals(newPrice, fromRepoAfterUpdate.price());
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void cannotReadId_throwException() throws Exception {
-        Book toSave = testUtils.makeDefaultBook(new BookId("not-parsable"));
-        bookRepository.save(toSave);
     }
 
     //    @Test

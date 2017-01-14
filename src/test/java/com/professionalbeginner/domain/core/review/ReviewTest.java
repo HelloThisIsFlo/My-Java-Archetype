@@ -28,7 +28,7 @@ public class ReviewTest {
     @Before
     public void setUp() throws Exception {
         validId = new ReviewId("abc");
-        validBookId = new BookId("book-id");
+        validBookId = new BookId(123L);
         validUser = new User("Patrick");
         validRating = new Rating(3);
     }
@@ -74,9 +74,9 @@ public class ReviewTest {
         ReviewId id3 = new ReviewId("third-id");
 
         new EqualsTester()
-                .addEqualityGroup(new Review(id1, new BookId("book-id"), validUser, validRating), new Review(id1, new BookId("book-id"), validUser, validRating))
-                .addEqualityGroup(new Review(id2, new BookId("book-id"), validUser, validRating), new Review(id2, new BookId("book-id"), validUser, validRating))
-                .addEqualityGroup(new Review(id3, new BookId("book-id"), validUser2, validRating2), new Review(id3, new BookId("book-id"), validUser, validRating))
+                .addEqualityGroup(new Review(id1, new BookId(567L), validUser, validRating), new Review(id1, new BookId(567L), validUser, validRating))
+                .addEqualityGroup(new Review(id2, new BookId(567L), validUser, validRating), new Review(id2, new BookId(567L), validUser, validRating))
+                .addEqualityGroup(new Review(id3, new BookId(567L), validUser2, validRating2), new Review(id3, new BookId(567L), validUser, validRating))
                 .testEquals();
     }
 

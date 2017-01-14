@@ -26,7 +26,7 @@ public class JpaMapper {
         );
 
         if (!book.id().sameValueAs(BookId.NOT_ASSIGNED)) {
-            jpaBook.setId(parseId(book));
+            jpaBook.setId(book.id().idLong());
         }
 
         return jpaBook;
@@ -47,11 +47,8 @@ public class JpaMapper {
     }
 
     private BookId getBookId(BookJpaEntity bookJpaEntity) {
-        return new BookId(bookJpaEntity.getId().toString());
+        return new BookId(bookJpaEntity.getId());
     }
 
-    private Long parseId(Book book) {
-        return Long.parseLong(book.id().idString());
-    }
 }
 

@@ -34,7 +34,7 @@ public class BookTest {
                 new Characteristics("Best Book Ever", "Best author", 777),
                 new Price(999)
         );
-        BookId id = new BookId("book-id");
+        BookId id = new BookId(123L);
         validBook.setId(id);
         validUser = new User("pedro");
     }
@@ -87,8 +87,8 @@ public class BookTest {
         Characteristics validCharact2 = new Characteristics("other title", "other author", 21);
         Price validPrice2 = new Price(120.23);
 
-        BookId id1 = new BookId("id1");
-        BookId id2 = new BookId("id2");
+        BookId id1 = new BookId(1L);
+        BookId id2 = new BookId(2L);
 
         Book bookWithId1 = new Book(validCharact, validPrice);
         Book differentBookWithId1 = new Book(validCharact2, validPrice2);
@@ -128,7 +128,7 @@ public class BookTest {
 
     @Test
     public void addReview_wrongBookId_throwException() throws Exception {
-        BookId wrongId = new BookId("wrong");
+        BookId wrongId = new BookId(345L);
         assertNotEquals(validBook.id(), wrongId);
 
         Review reviewWithWrongId = testUtils.makeRandomReview(wrongId);

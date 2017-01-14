@@ -39,13 +39,9 @@ public class HibernateBookRepository implements BookRepository{
 
     @Override
     public Book findById(BookId id, boolean withReviews) {
-        BookJpaEntity fromDB = hibernateCrudBookRepository.findOne(parseId(id));
+        BookJpaEntity fromDB = hibernateCrudBookRepository.findOne(id.idLong());
 
         return jpaMapper.map(fromDB);
-    }
-
-    private Long parseId(BookId id) {
-        return Long.parseLong(id.idString());
     }
 
     @Override

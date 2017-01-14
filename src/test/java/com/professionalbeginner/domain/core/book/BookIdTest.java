@@ -14,9 +14,8 @@ public class BookIdTest {
     @Test
     public void testEquality() throws Exception {
         new EqualsTester()
-                .addEqualityGroup(new BookId("asdf"), new BookId("asdf"))
-                .addEqualityGroup(new BookId("123"), new BookId("123"))
-                .addEqualityGroup(new BookId("ASDF"), new BookId("ASDF")) //Case - sensible (not equal to line 1)
+                .addEqualityGroup(new BookId(12L), new BookId(12L))
+                .addEqualityGroup(new BookId(123L), new BookId(123L))
                 .testEquals();
     }
 
@@ -26,19 +25,24 @@ public class BookIdTest {
     }
 
     @Test
-    public void emptyId() throws Exception {
+    public void negativeId() throws Exception {
         try {
-            new BookId("");
+            new BookId(-1L);
             fail("Should throw exception");
         } catch (IllegalArgumentException e) {
-            assertEquals("Id cannot be empty", e.getMessage());
+            assertEquals("Id cannot be <= 0", e.getMessage());
+        }
+        try {
+            new BookId(0L);
+            fail("Should throw exception");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Id cannot be <= 0", e.getMessage());
         }
     }
 
     @Test
-    public void idString() throws Exception {
-        BookId id = new BookId("id-string");
-        assertEquals("id-string", id.idString());
+    public void test_idLong() throws Exception {
+        BookId toTest = new BookId(456L);
+        assertEquals(456L, toTest.idLong());
     }
-
 }

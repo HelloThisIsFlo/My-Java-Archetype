@@ -17,7 +17,7 @@ public class Review implements Entity<Review> {
 
     public static final Review NULL = new Review(
             new ReviewId("-1"),
-            new BookId("-1"),
+            BookId.NOT_ASSIGNED,
             new User("-1"), new Rating(0)
     );
 
@@ -69,8 +69,8 @@ public class Review implements Entity<Review> {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("id", id.idString())
-                .add("bookId", bookId.idString())
+                .add("id", id.toString())
+                .add("bookId", bookId.toString())
                 .add("rating", rating.value())
                 .add("reviewer", reviewer.username())
                 .toString();
