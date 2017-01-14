@@ -1,18 +1,18 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
-import com.professionalbeginner.domain.core.review.*;
+import com.professionalbeginner.TestUtils;
+import com.professionalbeginner.domain.core.review.IllegalReviewException;
+import com.professionalbeginner.domain.core.review.Review;
+import com.professionalbeginner.domain.core.review.User;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @author Kempenich Florian
@@ -22,8 +22,9 @@ public class BookTest {
     private Characteristics validCharact;
     private Price validPrice;
     private User validUser;
-
     private Book validBook;
+
+    private TestUtils testUtils = new TestUtils();
 
     @Before
     public void setUp() throws Exception {
@@ -109,9 +110,9 @@ public class BookTest {
         assertEquals(Collections.emptyList(), validBook.getReviews());
 
         BookId id = validBook.id();
-        Review review1 = randomReview(id);
-        Review review2 = randomReview(id);
-        Review review3 = randomReview(id);
+        Review review1 = testUtils.makeRandomReview(id);
+        Review review2 = testUtils.makeRandomReview(id);
+        Review review3 = testUtils.makeRandomReview(id);
 
         List<Review> expected = new ArrayList<>(3);
         expected.add(review1);
@@ -130,7 +131,7 @@ public class BookTest {
         BookId wrongId = new BookId("wrong");
         assertNotEquals(validBook.id(), wrongId);
 
-        Review reviewWithWrongId = randomReview(wrongId);
+        Review reviewWithWrongId = testUtils.makeRandomReview(wrongId);
 
         try {
             validBook.addReview(reviewWithWrongId);
@@ -143,10 +144,10 @@ public class BookTest {
 
     @Test
     public void addReview_existingReviewForUser_throwException() throws Exception {
-        Review initialReview = randomReview(validBook.id(), validUser);
+        Review initialReview = testUtils.makeRandomReview(validBook.id(), validUser);
         validBook.addReview(initialReview);
 
-        Review reviewWithExistingUser = randomReview(validBook.id(), validUser);
+        Review reviewWithExistingUser = testUtils.makeRandomReview(validBook.id(), validUser);
 
         try {
             validBook.addReview(reviewWithExistingUser);
@@ -157,19 +158,4 @@ public class BookTest {
         }
     }
 
-    private Review randomReview(BookId bookId) {
-        Random random = new Random();
-        User user = new User(Integer.toString(random.nextInt(5000)));
-        return randomReview(random, bookId, user);
-    }
-
-    private Review randomReview(BookId bookId, User user) {
-        return randomReview(new Random(), bookId, user);
-    }
-
-    private Review randomReview(Random random, BookId bookId, User user) {
-        Rating rating = new Rating(random.nextInt(100));
-        ReviewId reviewId = new ReviewId(Integer.toString(random.nextInt()));
-        return new Review(reviewId, bookId, user, rating);
-    }
 }

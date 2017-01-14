@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/JavaArchetype
+    username: Dev
+    password: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
