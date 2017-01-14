@@ -29,5 +29,8 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	runtime('org.springframework.boot:spring-boot-devtools')
+    compile('com.google.guava:guava:20.0')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('com.google.guava:guava-testlib:20.0')
 }
