@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.review;
+package com.professionalbeginner.domain.core.review;
 
 /**
  * @author Kempenich Florian

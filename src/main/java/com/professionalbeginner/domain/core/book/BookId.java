@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.review;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.ddd.ValueObject;
@@ -9,40 +9,40 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Identifies a review
- *
  * @author Kempenich Florian
  */
-public class ReviewId implements ValueObject<ReviewId> {
+public class BookId implements ValueObject<BookId> {
 
     private String id;
 
-    public ReviewId(String id) {
+    public static final BookId NOT_ASSIGNED = new BookId("-1");
+
+    public BookId(String id) {
         checkNotNull(id);
         checkArgument(!id.isEmpty(), "Id cannot be empty");
         this.id = id;
     }
 
-    public String idString() {
-        return id;
-    }
-
     @Override
-    public boolean sameValueAs(ReviewId other) {
-        return other.id.equals(id);
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReviewId reviewId = (ReviewId) o;
-        return sameValueAs(reviewId);
+        BookId bookId = (BookId) o;
+        return sameValueAs(bookId);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public boolean sameValueAs(BookId other) {
+        return Objects.equals(id, other.id);
+    }
+
+    public String idString() {
+        return id;
     }
 
     @Override

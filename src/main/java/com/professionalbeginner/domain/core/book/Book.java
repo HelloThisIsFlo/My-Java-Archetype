@@ -1,10 +1,10 @@
-package com.professionalbeginner.domain.book;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.ddd.Entity;
-import com.professionalbeginner.domain.review.IllegalReviewException;
-import com.professionalbeginner.domain.review.Review;
-import com.professionalbeginner.domain.review.User;
+import com.professionalbeginner.domain.core.review.IllegalReviewException;
+import com.professionalbeginner.domain.core.review.Review;
+import com.professionalbeginner.domain.core.review.User;
 
 import java.util.ArrayList;
 import java.util.List;

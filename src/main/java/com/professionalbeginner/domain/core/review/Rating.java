@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.review;
+package com.professionalbeginner.domain.core.review;
 
 
 import com.professionalbeginner.domain.ddd.ValueObject;

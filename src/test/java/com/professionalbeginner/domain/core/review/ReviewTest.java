@@ -1,7 +1,7 @@
-package com.professionalbeginner.domain.review;
+package com.professionalbeginner.domain.core.review;
 
 import com.google.common.testing.EqualsTester;
-import com.professionalbeginner.domain.book.BookId;
+import com.professionalbeginner.domain.core.book.BookId;
 import org.junit.Before;
 import org.junit.Test;
 

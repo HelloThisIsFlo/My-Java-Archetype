@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.book;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.ddd.ValueObject;
