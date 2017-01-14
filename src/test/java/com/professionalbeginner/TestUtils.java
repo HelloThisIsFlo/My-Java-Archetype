@@ -11,8 +11,6 @@ import com.professionalbeginner.domain.core.review.User;
 import com.professionalbeginner.spring.IntegrationTests;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
 /**
  * @author Kempenich Florian
  */
@@ -39,19 +37,8 @@ public class TestUtils {
         );
     }
 
-    public Review makeRandomReview(BookId bookId) {
-        Random random = new Random();
-        User user = new User(Integer.toString(random.nextInt(5000)));
-        return makeRandomReview(random, bookId, user);
+    public Review makeReview(ReviewId reviewId, BookId bookId, int rating, String reviewerName) {
+        return new Review(reviewId, bookId, new User(reviewerName), new Rating(rating));
     }
 
-    public Review makeRandomReview(BookId bookId, User user) {
-        return makeRandomReview(new Random(), bookId, user);
-    }
-
-    private Review makeRandomReview(Random random, BookId bookId, User user) {
-        Rating rating = new Rating(random.nextInt(100));
-        ReviewId reviewId = new ReviewId(Integer.toString(random.nextInt()));
-        return new Review(reviewId, bookId, user, rating);
-    }
 }

@@ -65,18 +65,24 @@ public class HibernateBookRepositoryIntegrationTest {
         assertEquals(newPrice, fromRepoAfterUpdate.price());
     }
 
-    //    @Test
-//    public void saveAndFind_withReviews() throws Exception {
-//        Book toSave = testUtils.makeDefaultBook("random-id");
-//        toSave.addReview(testUtils.makeRandomReview());
+    @Test
+    public void saveAndFind_withReviews() throws Exception {
+        // Get id
+        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        BookId savedId = bookRepository.save(toSave);
+        toSave.setId(savedId);
+
+        // Add reviews and update version on repo
+        fail("uncomment & fix");
+//        toSave.addReview(testUtils.makeRandomReview(savedId));
+//        toSave.addReview(testUtils.makeRandomReview(savedId));
+//        toSave.addReview(testUtils.makeRandomReview(savedId));
+//        bookRepository.save(toSave);
 //
-//        BookId savedId = bookRepository.save(toSave);
+//        Book fromRepo = bookRepository.findById(savedId, true);
 //
-//        Book fromRepo = bookRepository.findById(savedId, false);
-//
-//        assertEquals(savedId, fromRepo.id());
-//        assertTrue(areBooksSimilar_ignoreReviews(toSave, fromRepo));
-//    }
+//        assertTrue(areBooksSimilar(toSave, fromRepo));
+    }
 
 //    @Test
 //    public void saveMultiple_findAll() throws Exception {

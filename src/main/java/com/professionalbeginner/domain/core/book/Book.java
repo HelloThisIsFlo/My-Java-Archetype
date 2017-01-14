@@ -1,6 +1,7 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
+import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.ddd.Entity;
 import com.professionalbeginner.domain.core.review.IllegalReviewException;
 import com.professionalbeginner.domain.core.review.Review;
@@ -96,8 +97,15 @@ public class Book implements Entity<Book> {
     }
 
     private void checkIfValid(Review review) {
+        checkIfReviewHasPersistedId(review);
         checkIfCorrectBookId(review);
         checkIfNoExistingReview(review);
+    }
+
+    private void checkIfReviewHasPersistedId(Review review) {
+        if (review.getId().sameValueAs(ReviewId.NOT_ASSIGNED)) {
+            throw new IllegalReviewException("Cannot accept a review with un-assigned id, persist it first", review);
+        }
     }
 
     private void checkIfCorrectBookId(Review review) {

@@ -2,9 +2,8 @@ package com.professionalbeginner.data.hibernate.model;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Kempenich Florian
@@ -20,14 +19,17 @@ public class BookJpaEntity {
     private String author;
     private int numPages;
     private double price;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ReviewJpaEntity> reviews;
 
     protected BookJpaEntity() {}
 
-    public BookJpaEntity(String title, String author, int numPages, double price) {
+    public BookJpaEntity(String title, String author, int numPages, double price, List<ReviewJpaEntity> reviews) {
         this.title = title;
         this.author = author;
         this.numPages = numPages;
         this.price = price;
+        this.reviews = reviews;
     }
 
     @Override
@@ -79,6 +81,14 @@ public class BookJpaEntity {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<ReviewJpaEntity> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewJpaEntity> reviews) {
+        this.reviews = reviews;
     }
 }
 

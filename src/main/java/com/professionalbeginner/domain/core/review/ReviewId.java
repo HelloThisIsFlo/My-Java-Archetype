@@ -17,6 +17,13 @@ public class ReviewId implements ValueObject<ReviewId> {
 
     private String id;
 
+    public static final ReviewId NOT_ASSIGNED = new ReviewId();
+
+    private ReviewId() {
+        // TODO: 1/14/2017 fix
+        this.id = "-123";
+    }
+
     public ReviewId(String id) {
         checkNotNull(id);
         checkArgument(!id.isEmpty(), "Id cannot be empty");

@@ -4,6 +4,7 @@ import com.google.common.testing.EqualsTester;
 import com.professionalbeginner.TestUtils;
 import com.professionalbeginner.domain.core.review.IllegalReviewException;
 import com.professionalbeginner.domain.core.review.Review;
+import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.core.review.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -110,9 +111,9 @@ public class BookTest {
         assertEquals(Collections.emptyList(), validBook.getReviews());
 
         BookId id = validBook.id();
-        Review review1 = testUtils.makeRandomReview(id);
-        Review review2 = testUtils.makeRandomReview(id);
-        Review review3 = testUtils.makeRandomReview(id);
+        Review review1 = testUtils.makeReview(new ReviewId("id-1"), id, 42, "mark");
+        Review review2 = testUtils.makeReview(new ReviewId("id-2"), id, 12, "patrick");
+        Review review3 = testUtils.makeReview(new ReviewId("id-3"), id, 16, "flo");
 
         List<Review> expected = new ArrayList<>(3);
         expected.add(review1);
@@ -131,7 +132,7 @@ public class BookTest {
         BookId wrongId = new BookId(345L);
         assertNotEquals(validBook.id(), wrongId);
 
-        Review reviewWithWrongId = testUtils.makeRandomReview(wrongId);
+        Review reviewWithWrongId = testUtils.makeReview(new ReviewId("452"), wrongId, 24, "mark");
 
         try {
             validBook.addReview(reviewWithWrongId);
@@ -144,10 +145,13 @@ public class BookTest {
 
     @Test
     public void addReview_existingReviewForUser_throwException() throws Exception {
-        Review initialReview = testUtils.makeRandomReview(validBook.id(), validUser);
+        ReviewId initialId = new ReviewId("123");
+        Review initialReview = testUtils.makeReview(initialId, validBook.id(), 45 ,validUser.username());
         validBook.addReview(initialReview);
 
-        Review reviewWithExistingUser = testUtils.makeRandomReview(validBook.id(), validUser);
+        ReviewId anotherId = new ReviewId("345");
+        assertNotEquals(initialId, anotherId);
+        Review reviewWithExistingUser = testUtils.makeReview(anotherId, validBook.id(), 55 ,validUser.username());
 
         try {
             validBook.addReview(reviewWithExistingUser);
@@ -156,6 +160,19 @@ public class BookTest {
             assertEquals("Review existing for this book for this user", e.getMessage());
             assertEquals(initialReview.getId(), e.getReview().getId());
         }
+    }
+
+    @Test
+    public void addReview_onlyAcceptReviewWithPersistedId() throws Exception {
+       Review review = testUtils.makeReview(ReviewId.NOT_ASSIGNED, validBook.id(), 22, "mark");
+       try {
+           validBook.addReview(review);
+           fail("Should throw exception");
+       } catch (IllegalReviewException e) {
+           assertEquals("Cannot accept a review with un-assigned id, persist it first", e.getMessage());
+           assertEquals(review, e.getReview());
+       }
+
     }
 
     @Test

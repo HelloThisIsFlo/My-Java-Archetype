@@ -1,6 +1,7 @@
 package com.professionalbeginner.data.hibernate;
 
 import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
+import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
@@ -33,13 +34,13 @@ public class HibernateBookRepository implements BookRepository{
         BookJpaEntity jpaBook = jpaMapper.map(book);
         hibernateCrudBookRepository.save(jpaBook);
 
-        Book saved = jpaMapper.map(jpaBook);
-        return saved.id();
+        return jpaMapper.mapId(jpaBook);
     }
 
     @Override
     public Book findById(BookId id, boolean withReviews) {
         BookJpaEntity fromDB = hibernateCrudBookRepository.findOne(id.idLong());
+        List<ReviewJpaEntity> revDb = fromDB.getReviews();
 
         return jpaMapper.map(fromDB);
     }
