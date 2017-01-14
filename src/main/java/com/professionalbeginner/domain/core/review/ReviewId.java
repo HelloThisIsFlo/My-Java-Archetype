@@ -6,7 +6,6 @@ import com.professionalbeginner.domain.ddd.ValueObject;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Identifies a review
@@ -15,23 +14,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ReviewId implements ValueObject<ReviewId> {
 
-    private String id;
-
     public static final ReviewId NOT_ASSIGNED = new ReviewId();
 
+    private Long id;
+
     private ReviewId() {
-        // TODO: 1/14/2017 fix
-        this.id = "-123";
+        this.id = -1L;
     }
 
-    public ReviewId(String id) {
-        checkNotNull(id);
-        checkArgument(!id.isEmpty(), "Id cannot be empty");
+    public ReviewId(Long id) {
+        checkArgument(id > 0, "Id cannot be <= 0");
         this.id = id;
-    }
-
-    public String idString() {
-        return id;
     }
 
     @Override
@@ -57,5 +50,9 @@ public class ReviewId implements ValueObject<ReviewId> {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .toString();
+    }
+
+    public long idLong() {
+        return id;
     }
 }

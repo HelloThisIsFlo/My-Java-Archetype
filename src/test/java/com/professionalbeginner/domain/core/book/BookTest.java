@@ -111,9 +111,9 @@ public class BookTest {
         assertEquals(Collections.emptyList(), validBook.getReviews());
 
         BookId id = validBook.id();
-        Review review1 = testUtils.makeReview(new ReviewId("id-1"), id, 42, "mark");
-        Review review2 = testUtils.makeReview(new ReviewId("id-2"), id, 12, "patrick");
-        Review review3 = testUtils.makeReview(new ReviewId("id-3"), id, 16, "flo");
+        Review review1 = testUtils.makeReview(new ReviewId(1L), id, 42, "mark");
+        Review review2 = testUtils.makeReview(new ReviewId(2L), id, 12, "patrick");
+        Review review3 = testUtils.makeReview(new ReviewId(3L), id, 16, "flo");
 
         List<Review> expected = new ArrayList<>(3);
         expected.add(review1);
@@ -132,7 +132,7 @@ public class BookTest {
         BookId wrongId = new BookId(345L);
         assertNotEquals(validBook.id(), wrongId);
 
-        Review reviewWithWrongId = testUtils.makeReview(new ReviewId("452"), wrongId, 24, "mark");
+        Review reviewWithWrongId = testUtils.makeReview(new ReviewId(452L), wrongId, 24, "mark");
 
         try {
             validBook.addReview(reviewWithWrongId);
@@ -145,11 +145,11 @@ public class BookTest {
 
     @Test
     public void addReview_existingReviewForUser_throwException() throws Exception {
-        ReviewId initialId = new ReviewId("123");
+        ReviewId initialId = new ReviewId(123L);
         Review initialReview = testUtils.makeReview(initialId, validBook.id(), 45 ,validUser.username());
         validBook.addReview(initialReview);
 
-        ReviewId anotherId = new ReviewId("345");
+        ReviewId anotherId = new ReviewId(345L);
         assertNotEquals(initialId, anotherId);
         Review reviewWithExistingUser = testUtils.makeReview(anotherId, validBook.id(), 55 ,validUser.username());
 

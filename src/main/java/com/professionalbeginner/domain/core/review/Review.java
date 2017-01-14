@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class Review implements Entity<Review> {
 
     public static final Review NULL = new Review(
-            new ReviewId("-1"),
+            ReviewId.NOT_ASSIGNED,
             BookId.NOT_ASSIGNED,
             new User("-1"), new Rating(0)
     );

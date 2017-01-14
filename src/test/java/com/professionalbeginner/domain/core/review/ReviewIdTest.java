@@ -17,21 +17,33 @@ public class ReviewIdTest {
     }
 
     @Test
-    public void emptyId() throws Exception {
+    public void negativeId() throws Exception {
         try {
-            new ReviewId("");
+            new ReviewId(-1L);
             fail("Should throw exception");
-        } catch (Exception e) {
-            assertEquals("Id cannot be empty", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            assertEquals("Id cannot be <= 0", e.getMessage());
         }
+        try {
+            new ReviewId(0L);
+            fail("Should throw exception");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Id cannot be <= 0", e.getMessage());
+        }
+    }
+
+    @Test
+    public void test_idLong() throws Exception {
+        ReviewId toTest = new ReviewId(456L);
+        assertEquals(456L, toTest.idLong());
+
     }
 
     @Test
     public void testEquality() throws Exception {
         new EqualsTester()
-                .addEqualityGroup(new ReviewId("asdf"), new ReviewId("asdf"))
-                .addEqualityGroup(new ReviewId("dd"), new ReviewId("dd"))
-                .addEqualityGroup(new ReviewId("DD"), new ReviewId("DD"))
+                .addEqualityGroup(new ReviewId(123L), new ReviewId(123L))
+                .addEqualityGroup(new ReviewId(677L), new ReviewId(677L))
                 .testEquals();
     }
 

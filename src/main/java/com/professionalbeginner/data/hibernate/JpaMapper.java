@@ -77,7 +77,7 @@ public class JpaMapper {
     }
 
     public Review map(ReviewJpaEntity reviewJpaEntity) {
-        ReviewId id = new ReviewId(reviewJpaEntity.getId().toString());
+        ReviewId id = new ReviewId(reviewJpaEntity.getId());
         BookId bookId = new BookId(reviewJpaEntity.getBookId());
         User reviewer = new User(reviewJpaEntity.getReviewer());
         Rating rating = new Rating(reviewJpaEntity.getRating());
