@@ -158,4 +158,19 @@ public class BookTest {
         }
     }
 
+    @Test
+    public void updatePrice() throws Exception {
+        Price originalPrice = validBook.price();
+        Price newPrice = new Price(originalPrice.amount() / 2);
+
+        validBook.updatePrice(newPrice);
+        assertEquals(newPrice, validBook.price());
+
+        try {
+            validBook.updatePrice(null);
+            fail("Should throw exception");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
 }

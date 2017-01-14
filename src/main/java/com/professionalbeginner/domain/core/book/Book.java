@@ -91,6 +91,10 @@ public class Book implements Entity<Book> {
         reviews.add(review);
     }
 
+    public void updatePrice(Price newPrice) {
+        this.price = checkNotNull(newPrice);
+    }
+
     private void checkIfValid(Review review) {
         checkIfCorrectBookId(review);
         checkIfNoExistingReview(review);

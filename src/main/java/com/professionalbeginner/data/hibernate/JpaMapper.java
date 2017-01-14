@@ -5,6 +5,8 @@ import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Characteristics;
 import com.professionalbeginner.domain.core.book.Price;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,13 +15,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class JpaMapper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JpaMapper.class);
+
     public BookJpaEntity map(Book book) {
-        return new BookJpaEntity(
+        BookJpaEntity jpaBook = new BookJpaEntity(
                 book.characteristics().title(),
                 book.characteristics().author(),
                 book.characteristics().numPages(),
                 book.price().amount()
         );
+
+        if (!book.id().sameValueAs(BookId.NOT_ASSIGNED)) {
+            jpaBook.setId(parseId(book));
+        }
+
+        return jpaBook;
     }
 
     public Book map(BookJpaEntity bookJpaEntity) {

@@ -20,16 +20,16 @@ import java.util.Random;
 @IntegrationTests
 public class TestUtils {
 
-    public Book makeBook(String id, String title, String author, int numPage, double price) {
+    public Book makeBook(BookId id, String title, String author, int numPage, double price) {
         Book book = new Book(
                 new Characteristics(title, author, numPage),
                 new Price(price)
         );
-        book.setId(new BookId(id));
+        book.setId(id);
         return book;
     }
 
-    public Book makeDefaultBook(String id) {
+    public Book makeDefaultBook(BookId id) {
         return makeBook(
                 id,
                 "Default title",

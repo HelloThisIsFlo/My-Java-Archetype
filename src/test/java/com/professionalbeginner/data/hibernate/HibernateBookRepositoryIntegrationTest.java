@@ -1,8 +1,10 @@
 package com.professionalbeginner.data.hibernate;
 
+import com.google.common.collect.Iterables;
 import com.professionalbeginner.TestUtils;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
+import com.professionalbeginner.domain.core.book.Price;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,14 +35,11 @@ public class HibernateBookRepositoryIntegrationTest {
 
     @Test
     public void saveAndFind_withoutReviews() throws Exception {
-        String id = "id-1";
-
-        Book toSave = testUtils.makeDefaultBook(id);
-
-        assertEquals(id, toSave.id().idString());
+        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        assertEquals(BookId.NOT_ASSIGNED, toSave.id());
 
         BookId savedId = bookRepository.save(toSave);
-        assertNotEquals(id, savedId.idString()); //Check that repository updates the id
+        assertNotEquals(BookId.NOT_ASSIGNED, savedId); //Check that repository returns a correct id
 
         Book fromRepo = bookRepository.findById(savedId, false);
 
@@ -48,17 +47,38 @@ public class HibernateBookRepositoryIntegrationTest {
         assertTrue(areBooksSimilar_ignoreReviews(toSave, fromRepo));
     }
 
+    @Test
+    public void saveWithExistingId_updatesExistingReview() throws Exception {
+        // Save book and get id
+        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        BookId savedId = bookRepository.save(toSave);
+        toSave.setId(savedId);
 
-//    @Test
+        // Change state of book
+        Price originalPrice = toSave.price();
+        Price newPrice = new Price(originalPrice.amount() / 2);
+        toSave.updatePrice(newPrice);
+
+        Book fromRepo = bookRepository.findById(savedId, false);
+        bookRepository.save(toSave);
+        Book fromRepoAfterUpdate = bookRepository.findById(savedId, false);
+
+        assertEquals(originalPrice, fromRepo.price());
+        assertEquals(newPrice, fromRepoAfterUpdate.price());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void cannotReadId_throwException() throws Exception {
+        Book toSave = testUtils.makeDefaultBook(new BookId("not-parsable"));
+        bookRepository.save(toSave);
+    }
+
+    //    @Test
 //    public void saveAndFind_withReviews() throws Exception {
-//        String id = "id-1";
-//
-//        Book toSave = testUtils.makeDefaultBook(id);
-//
-//        assertEquals(id, toSave.id().idString());
+//        Book toSave = testUtils.makeDefaultBook("random-id");
+//        toSave.addReview(testUtils.makeRandomReview());
 //
 //        BookId savedId = bookRepository.save(toSave);
-//        assertNotEquals(id, savedId.idString()); //Check that repository updates the id
 //
 //        Book fromRepo = bookRepository.findById(savedId, false);
 //
@@ -91,6 +111,10 @@ public class HibernateBookRepositoryIntegrationTest {
 //        assertTrue("List does not contain book: " + toCheck, contains);
 //    }
 //
+    private boolean areBooksSimilar(Book toCheck, Book book) {
+        return areBooksSimilar_ignoreReviews(toCheck, book)
+                && Iterables.elementsEqual(toCheck.getReviews(), book.getReviews());
+    }
     private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
         return toCheck.characteristics().title().equals(book.characteristics().title()) &&
                 toCheck.characteristics().author().equals(book.characteristics().author()) &&
