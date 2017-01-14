@@ -6,6 +6,7 @@ import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Price;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,7 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void saveAndFind_withReviews() throws Exception {
         // Get id
         Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
@@ -83,6 +85,26 @@ public class HibernateBookRepositoryIntegrationTest {
 //
 //        assertTrue(areBooksSimilar(toSave, fromRepo));
     }
+
+    private boolean areBooksSimilar(Book toCheck, Book book) {
+        return areBooksSimilar_ignoreReviews(toCheck, book)
+                && Iterables.elementsEqual(toCheck.getReviews(), book.getReviews());
+    }
+    private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
+        return toCheck.characteristics().title().equals(book.characteristics().title()) &&
+                toCheck.characteristics().author().equals(book.characteristics().author()) &&
+                toCheck.characteristics().numPages() == book.characteristics().numPages() &&
+                Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
+    }
+
+
+
+
+
+
+
+
+
 
 //    @Test
 //    public void saveMultiple_findAll() throws Exception {
@@ -109,14 +131,5 @@ public class HibernateBookRepositoryIntegrationTest {
 //        assertTrue("List does not contain book: " + toCheck, contains);
 //    }
 //
-    private boolean areBooksSimilar(Book toCheck, Book book) {
-        return areBooksSimilar_ignoreReviews(toCheck, book)
-                && Iterables.elementsEqual(toCheck.getReviews(), book.getReviews());
-    }
-    private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
-        return toCheck.characteristics().title().equals(book.characteristics().title()) &&
-                toCheck.characteristics().author().equals(book.characteristics().author()) &&
-                toCheck.characteristics().numPages() == book.characteristics().numPages() &&
-                Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
-    }
+
 }
