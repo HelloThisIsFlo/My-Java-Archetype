@@ -1,5 +1,6 @@
 package com.professionalbeginner.domain.review;
 
+import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.ddd.ValueObject;
 
 import java.util.Objects;
@@ -42,5 +43,12 @@ public class ReviewId implements ValueObject<ReviewId> {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .toString();
     }
 }
