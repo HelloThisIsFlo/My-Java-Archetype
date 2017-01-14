@@ -61,6 +61,10 @@ public class JpaMapper {
         return new BookId(jpaBook.getId());
     }
 
+    public ReviewId mapId(ReviewJpaEntity reviewJpa) {
+        return new ReviewId(reviewJpa.getId());
+    }
+
     private void addAllReviews(Book book, List<ReviewJpaEntity> reviewJpaEntities) {
         reviewJpaEntities.stream()
                 .map(this::map)
