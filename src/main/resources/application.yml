@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/JavaArchetype
-    username: Dev
+    url: jdbc:postgresql://localhost:5432/javaarchetype
+    username: dev
     password: dev
 
   jpa:
