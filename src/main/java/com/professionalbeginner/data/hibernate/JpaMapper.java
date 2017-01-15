@@ -31,7 +31,7 @@ public class JpaMapper {
                 book.characteristics().author(),
                 book.characteristics().numPages(),
                 book.price().amount(),
-                mapAll(book.getReviews())
+                mapAllToORM(book.getReviews())
         );
 
         if (!book.id().sameValueAs(BookId.NOT_ASSIGNED)) {
@@ -89,11 +89,16 @@ public class JpaMapper {
         return new Review(id, bookId, reviewer, rating);
     }
 
-    public List<ReviewJpaEntity> mapAll(List<Review> reviews) {
+    public List<ReviewJpaEntity> mapAllToORM(List<Review> reviews) {
         return reviews.stream()
                 .map(this::map)
                 .collect(Collectors.toList());
     }
 
+    public List<Book> mapAllToDomain(List<BookJpaEntity> jpaEntities) {
+        return jpaEntities.stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
 }
 

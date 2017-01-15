@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -85,7 +86,7 @@ public class HibernateBookRepositoryIntegrationTest {
         toSave.setId(savedId);
 
         // Create and persist review
-        List<Review> reviews = createAndPersistSampleReviews(savedId);
+        List<Review> reviews = createAndPersistRandomReviews(savedId);
 
         // Add reviews and update version on repo
         reviews.forEach(toSave::addReview);
@@ -98,11 +99,38 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
     @Test
-    @Ignore
     public void saveMultiple_findAll_withReviews() throws Exception {
-//        Book book1 = testUtils.makeBook(BookId.NOT_ASSIGNED, randomString(), randomString(), randomPositiveInt(300), randomPositiveInt(180) / 2.0);
+        // Generate random books
         Book book1 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        Book book2 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        Book book3 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        List<Book> books = Arrays.asList(book1, book2, book3);
 
+        // Save all books & update ids
+        books.forEach(book -> {
+            BookId id = bookRepository.save(book);
+            book.setId(id);
+        });
+
+        // Add reviews
+        List<Review> reviewsBook1 = createAndPersistRandomReviews(book1.id());
+        List<Review> reviewsBook2 = createAndPersistRandomReviews(book2.id());
+        List<Review> reviewsBook3 = createAndPersistRandomReviews(book3.id());
+        reviewsBook1.forEach(book1::addReview);
+        reviewsBook2.forEach(book2::addReview);
+        reviewsBook3.forEach(book3::addReview);
+
+        // Update books via Repo
+        books.forEach(bookRepository::save);
+
+        // Get all w/ Reviews
+        List<Book> fromRepo = bookRepository.findAll(true);
+
+
+        // Assert List contain similar books
+        books.forEach(
+                book -> assertListContainsSimilarBook_withReviews(book, fromRepo)
+        );
     }
 
     @Test
@@ -118,7 +146,7 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
 
-    private List<Review> createAndPersistSampleReviews(BookId bookId) {
+    private List<Review> createAndPersistRandomReviews(BookId bookId) {
         Review review1 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
         Review review2 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
         Review review3 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
@@ -132,12 +160,31 @@ public class HibernateBookRepositoryIntegrationTest {
         return Arrays.asList(review1, review2, review3);
     }
 
+    private void assertListContainsSimilarBook_withReviews(Book toCheck, List<Book> bookList) {
+        boolean contains = bookList.stream()
+                .anyMatch(book -> areBooksSimilar(toCheck, book));
+        assertTrue("List does not contain book: " + toCheck, contains);
+    }
+
+    private void assertListContainsSimilarBook_ignoreReview(Book toCheck, List<Book> bookList) {
+        boolean contains = bookList.stream()
+                .anyMatch(book -> areBooksSimilar_ignoreReviews(toCheck, book));
+        assertTrue("List does not contain book: " + toCheck, contains);
+    }
+
+    private boolean areBooksSimilar(Book toCheck, Book book) {
+        return areBooksSimilar_ignoreReviews(toCheck, book)
+                && toCheck.getReviews().containsAll(book.getReviews())
+                && book.getReviews().containsAll(toCheck.getReviews());
+    }
+
     private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
         return toCheck.characteristics().title().equals(book.characteristics().title()) &&
                 toCheck.characteristics().author().equals(book.characteristics().author()) &&
                 toCheck.characteristics().numPages() == book.characteristics().numPages() &&
                 Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
     }
+
 
 //    @Test
 //    public void saveMultiple_findAll() throws Exception {
@@ -157,12 +204,6 @@ public class HibernateBookRepositoryIntegrationTest {
 //        assertListContainsSimilarBook(book3, fromRepo);
 //    }
 //
-//    private void assertListContainsSimilarBook(Book toCheck, List<Book> bookList) {
-//        boolean contains = bookList.stream()
-//                .anyMatch(book -> areBooksSimilar(toCheck, book));
-//
-//        assertTrue("List does not contain book: " + toCheck, contains);
-//    }
 //
 
 }

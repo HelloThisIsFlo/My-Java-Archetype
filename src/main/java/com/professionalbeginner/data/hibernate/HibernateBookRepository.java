@@ -10,6 +10,7 @@ import com.professionalbeginner.spring.Prod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +47,9 @@ public class HibernateBookRepository implements BookRepository{
 
     @Override
     public List<Book> findAll(boolean withReviews) {
-        throw new RuntimeException("Not yet implemented");
+        List<BookJpaEntity> fromDB = new ArrayList<>();
+        hibernateCrudBookRepository.findAll().forEach(fromDB::add);
+
+        return jpaMapper.mapAllToDomain(fromDB);
     }
 }
