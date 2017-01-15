@@ -1,4 +1,4 @@
-package com.professionalbeginner.spring;
+package com.professionalbeginner._other.spring;
 
 import org.springframework.context.annotation.Profile;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Profile("prod")
-public @interface Prod {
+@Profile("integration-tests")
+public @interface IntegrationTests {
 }

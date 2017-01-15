@@ -1,6 +1,6 @@
 package com.professionalbeginner.domain.core.review;
 
-import com.professionalbeginner.domain.ddd.ValueObject;
+import com.professionalbeginner._other.ddd.ValueObject;
 
 import java.util.Objects;
 

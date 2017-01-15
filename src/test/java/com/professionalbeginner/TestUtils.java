@@ -8,7 +8,7 @@ import com.professionalbeginner.domain.core.review.Rating;
 import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.core.review.User;
-import com.professionalbeginner.spring.IntegrationTests;
+import com.professionalbeginner._other.spring.IntegrationTests;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;

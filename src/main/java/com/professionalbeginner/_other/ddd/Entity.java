@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.ddd;
+package com.professionalbeginner._other.ddd;
 
 /**
  * @author Kempenich Florian

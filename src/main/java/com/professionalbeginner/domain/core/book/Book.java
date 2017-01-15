@@ -2,7 +2,7 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.core.review.ReviewId;
-import com.professionalbeginner.domain.ddd.Entity;
+import com.professionalbeginner._other.ddd.Entity;
 import com.professionalbeginner.domain.core.review.IllegalReviewException;
 import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.User;

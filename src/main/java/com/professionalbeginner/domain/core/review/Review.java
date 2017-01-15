@@ -2,7 +2,7 @@ package com.professionalbeginner.domain.core.review;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.ddd.Entity;
+import com.professionalbeginner._other.ddd.Entity;
 
 import java.util.Objects;
 

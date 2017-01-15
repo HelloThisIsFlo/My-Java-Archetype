@@ -5,14 +5,13 @@ import com.professionalbeginner.data.hibernate.springdata.HibernateCrudBookRepos
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.spring.IntegrationTests;
-import com.professionalbeginner.spring.Prod;
+import com.professionalbeginner._other.spring.IntegrationTests;
+import com.professionalbeginner._other.spring.Prod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

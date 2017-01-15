@@ -1,7 +1,7 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
-import com.professionalbeginner.domain.ddd.ValueObject;
+import com.professionalbeginner._other.ddd.ValueObject;
 
 import java.util.Objects;
 
