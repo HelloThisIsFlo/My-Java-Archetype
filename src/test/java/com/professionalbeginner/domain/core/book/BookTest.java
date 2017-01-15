@@ -25,10 +25,12 @@ public class BookTest {
     private User validUser;
     private Book validBook;
 
-    private TestUtils testUtils = new TestUtils();
+    private TestUtils testUtils;
 
     @Before
     public void setUp() throws Exception {
+        testUtils = new TestUtils();
+
         validCharact = new Characteristics("title", "author", 34);
         validPrice = new Price(530.1);
         validBook = new Book(
@@ -169,7 +171,7 @@ public class BookTest {
      * But then we'd lose control over the id of Reviews (since they're automatically attributed).
      * In which case it might be better then to model the `Entity equality` as the pair
      * {"BookId", "User"}.
-     * If we want to keep `ReviewId` and compare `Reviews` with them, then better keep controll on
+     * If we want to keep `ReviewId` and compare `Reviews` with them, then better keep control on
      * them.
      *
      * To do the automatic saving on hibernate, use: `Cascade ALL`.

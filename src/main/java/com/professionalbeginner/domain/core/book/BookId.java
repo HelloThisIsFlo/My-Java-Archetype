@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class BookId implements ValueObject<BookId> {
 
-    private Long id;
+    private final Long id;
 
     public static final BookId NOT_ASSIGNED = new BookId();
     private BookId() {

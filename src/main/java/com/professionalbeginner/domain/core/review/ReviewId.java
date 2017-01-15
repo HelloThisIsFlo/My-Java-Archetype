@@ -16,7 +16,7 @@ public class ReviewId implements ValueObject<ReviewId> {
 
     public static final ReviewId NOT_ASSIGNED = new ReviewId();
 
-    private Long id;
+    private final Long id;
 
     private ReviewId() {
         this.id = -1L;

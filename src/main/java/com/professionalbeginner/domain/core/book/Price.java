@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class Price implements ValueObject<Price> {
 
-    private double amount;
+    private final double amount;
 
     public Price(double amount) {
         checkArgument(amount >= 0, "Amount cannot be < 0");

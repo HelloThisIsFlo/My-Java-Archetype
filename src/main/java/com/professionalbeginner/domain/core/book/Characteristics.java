@@ -13,9 +13,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class Characteristics implements ValueObject<Characteristics> {
 
-    private String title;
-    private String author;
-    private int numPages;
+    private final String title;
+    private final String author;
+    private final int numPages;
 
     public Characteristics(String title, String author, int numPages) {
         checkNotNull(title);
