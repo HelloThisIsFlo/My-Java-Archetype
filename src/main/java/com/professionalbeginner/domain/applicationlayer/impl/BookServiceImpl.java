@@ -9,6 +9,7 @@ import com.professionalbeginner.domain.core.review.*;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
+import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +21,16 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-
     private final BookRepository bookRepository;
     private final ReviewRepository reviewRepository;
 
+    private final StatisticsContract statistics;
+
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, ReviewRepository reviewRepository) {
+    public BookServiceImpl(BookRepository bookRepository, ReviewRepository reviewRepository, StatisticsContract statistics) {
         this.bookRepository = bookRepository;
         this.reviewRepository = reviewRepository;
+        this.statistics = statistics;
     }
 
     @Override
@@ -72,11 +75,10 @@ public class BookServiceImpl implements BookService {
     }
 
     private double processAverageRating(List<Review> reviews) {
-        double sumReviews = reviews.stream()
+        Integer[] ratings = reviews.stream()
                 .map(Review::getRating)
-                .mapToInt(Rating::value)
-                .sum();
-        double numberReviews = reviews.size();
-        return sumReviews / numberReviews;
+                .map(Rating::value)
+                .toArray(Integer[]::new);
+        return statistics.processAverage(ratings);
     }
 }

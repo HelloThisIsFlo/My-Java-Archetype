@@ -12,9 +12,10 @@ import com.professionalbeginner.domain.core.review.*;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
+import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
+import com.professionalbeginner.statisticsmodule.StatisticsContractImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class BookServiceImplTest {
 
         bookRepository = new InMemoryBookRepository();
         reviewRepository = new FakeReviewRepository();
-        bookService = new BookServiceImpl(bookRepository, reviewRepository);
+        StatisticsContract statistics = new StatisticsContractImpl();
+        bookService = new BookServiceImpl(bookRepository, reviewRepository, statistics);
     }
 
 
