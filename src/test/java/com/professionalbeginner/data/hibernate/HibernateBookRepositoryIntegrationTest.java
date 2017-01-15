@@ -6,6 +6,7 @@ import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Price;
 import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
+import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.junit.Test;
@@ -37,6 +38,18 @@ public class HibernateBookRepositoryIntegrationTest {
 
     @Autowired
     private TestUtils testUtils;
+
+    @Test
+    public void bookNotFound_throwException() throws Exception {
+        BookId inexistingId = new BookId(123L);
+        try {
+            bookRepository.findById(inexistingId, true);
+            fail("Should throw exception");
+        } catch (BookNotFoundException e) {
+            assertEquals("Book could not be found: " + inexistingId, e.getMessage());
+            assertEquals(inexistingId, e.getSearchedId());
+        }
+    }
 
     @Test
     public void saveAndFind_withoutReviews() throws Exception {
@@ -197,26 +210,5 @@ public class HibernateBookRepositoryIntegrationTest {
                 toCheck.characteristics().numPages() == book.characteristics().numPages() &&
                 Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
     }
-
-
-//    @Test
-//    public void saveMultiple_findAll() throws Exception {
-//        Book book1 = testUtils.makeBook("id-1", "title", "author", 39, 53.12);
-//        Book book2 = testUtils.makeBook("id-2", "Learn portuguese", "Alexandra", 321, 124);
-//        Book book3 = testUtils.makeBook("id-3", "Third book", "Philip", 665, 53.2);
-//
-//        bookRepository.save(book1);
-//        bookRepository.save(book2);
-//        bookRepository.save(book3);
-//
-//        List<Book> fromRepo = bookRepository.findAll(false);
-//
-//        assertEquals(3, fromRepo.size());
-//        assertListContainsSimilarBook(book1, fromRepo);
-//        assertListContainsSimilarBook(book2, fromRepo);
-//        assertListContainsSimilarBook(book3, fromRepo);
-//    }
-//
-//
 
 }

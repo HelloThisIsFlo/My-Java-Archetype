@@ -12,7 +12,7 @@ public interface BookRepository {
 
     BookId save(Book book);
 
-    Book findById(BookId id, boolean withReviews);
+    Book findById(BookId id, boolean withReviews) throws BookNotFoundException;
 
     List<Book> findAll(boolean withReviews);
 }

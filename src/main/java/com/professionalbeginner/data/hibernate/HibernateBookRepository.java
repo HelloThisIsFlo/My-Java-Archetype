@@ -4,6 +4,7 @@ import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
 import com.professionalbeginner.data.hibernate.springdata.HibernateCrudBookRepository;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
+import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner._other.spring.IntegrationTests;
 import com.professionalbeginner._other.spring.Prod;
@@ -41,8 +42,11 @@ public class HibernateBookRepository implements BookRepository {
 
     @Override
     @Transactional // Aspect-oriented annotation that wraps the method call in a transaction
-    public Book findById(BookId id, boolean withReviews) {
+    public Book findById(BookId id, boolean withReviews) throws BookNotFoundException {
         BookJpaEntity fromDB = hibernateCrudBookRepository.findOne(id.idLong());
+        if (fromDB == null) {
+            throw new BookNotFoundException(id);
+        }
 
         return jpaMapper.map(fromDB, withReviews);
     }
