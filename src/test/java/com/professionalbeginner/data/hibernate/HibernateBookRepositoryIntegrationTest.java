@@ -210,5 +210,4 @@ public class HibernateBookRepositoryIntegrationTest {
                 toCheck.characteristics().numPages() == book.characteristics().numPages() &&
                 Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
     }
-
 }
