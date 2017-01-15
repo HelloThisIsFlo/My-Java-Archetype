@@ -80,4 +80,8 @@ public class Review implements Entity<Review> {
     public boolean sameIdentityAs(Review other) {
         return other.id.sameValueAs(id);
     }
+
+    public void setId(ReviewId id) {
+        this.id = checkNotNull(id);
+    }
 }

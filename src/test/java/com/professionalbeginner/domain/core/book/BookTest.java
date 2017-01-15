@@ -162,6 +162,19 @@ public class BookTest {
         }
     }
 
+    /*
+     * Note to self:
+     *
+     * Another solution would be to automatically save the reviews when the book is persisted.
+     * But then we'd lose control over the id of Reviews (since they're automatically attributed).
+     * In which case it might be better then to model the `Entity equality` as the pair
+     * {"BookId", "User"}.
+     * If we want to keep `ReviewId` and compare `Reviews` with them, then better keep controll on
+     * them.
+     *
+     * To do the automatic saving on hibernate, use: `Cascade ALL`.
+     *
+     */
     @Test
     public void addReview_onlyAcceptReviewWithPersistedId() throws Exception {
        Review review = testUtils.makeReview(ReviewId.NOT_ASSIGNED, validBook.id(), 22, "mark");

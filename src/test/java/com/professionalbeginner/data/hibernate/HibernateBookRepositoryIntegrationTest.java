@@ -1,12 +1,13 @@
 package com.professionalbeginner.data.hibernate;
 
-import com.google.common.collect.Iterables;
 import com.professionalbeginner.TestUtils;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Price;
+import com.professionalbeginner.domain.core.review.Review;
+import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import org.junit.Ignore;
+import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class HibernateBookRepositoryIntegrationTest {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private TestUtils testUtils;
@@ -47,7 +50,7 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveWithExistingId_updatesExistingReview() throws Exception {
+    public void saveWithExistingId_updatesExisting() throws Exception {
         // Save book and get id
         Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
         BookId savedId = bookRepository.save(toSave);
@@ -58,38 +61,46 @@ public class HibernateBookRepositoryIntegrationTest {
         Price newPrice = new Price(originalPrice.amount() / 2);
         toSave.updatePrice(newPrice);
 
+        // Get from repo before and after update
         Book fromRepo = bookRepository.findById(savedId, false);
         bookRepository.save(toSave);
         Book fromRepoAfterUpdate = bookRepository.findById(savedId, false);
 
+        // Assert result
         assertEquals(originalPrice, fromRepo.price());
         assertEquals(newPrice, fromRepoAfterUpdate.price());
     }
 
     @Test
-    @Ignore
     public void saveAndFind_withReviews() throws Exception {
         // Get id
         Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
         BookId savedId = bookRepository.save(toSave);
         toSave.setId(savedId);
 
+        // Create and persist review
+        Review review1 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 44, "mark");
+        Review review2 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 30, "bob");
+        Review review3 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 98, "frank");
+        ReviewId id1 = reviewRepository.save(review1);
+        ReviewId id2 = reviewRepository.save(review2);
+        ReviewId id3 = reviewRepository.save(review3);
+        review1.setId(id1);
+        review2.setId(id2);
+        review3.setId(id3);
+
         // Add reviews and update version on repo
-        fail("uncomment & fix");
-//        toSave.addReview(testUtils.makeRandomReview(savedId));
-//        toSave.addReview(testUtils.makeRandomReview(savedId));
-//        toSave.addReview(testUtils.makeRandomReview(savedId));
-//        bookRepository.save(toSave);
-//
-//        Book fromRepo = bookRepository.findById(savedId, true);
-//
-//        assertTrue(areBooksSimilar(toSave, fromRepo));
+        toSave.addReview(review1);
+        toSave.addReview(review2);
+        toSave.addReview(review3);
+        bookRepository.save(toSave);
+
+        Book fromRepo = bookRepository.findById(savedId, true);
+
+        assertEquals(toSave.getReviews(), fromRepo.getReviews());
+        assertTrue(areBooksSimilar_ignoreReviews(toSave, fromRepo));
     }
 
-    private boolean areBooksSimilar(Book toCheck, Book book) {
-        return areBooksSimilar_ignoreReviews(toCheck, book)
-                && Iterables.elementsEqual(toCheck.getReviews(), book.getReviews());
-    }
     private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
         return toCheck.characteristics().title().equals(book.characteristics().title()) &&
                 toCheck.characteristics().author().equals(book.characteristics().author()) &&

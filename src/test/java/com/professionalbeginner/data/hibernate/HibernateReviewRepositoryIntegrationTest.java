@@ -1,9 +1,11 @@
 package com.professionalbeginner.data.hibernate;
 
 import com.professionalbeginner.TestUtils;
+import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
+import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,17 +26,26 @@ public class HibernateReviewRepositoryIntegrationTest {
 
     @Autowired
     ReviewRepository reviewRepository;
+    @Autowired
+    BookRepository bookRepository;
 
     @Autowired
     TestUtils testUtils;
 
     @Test
     public void saveReview_correctId() throws Exception {
-        BookId bookId = new BookId(456L);
+        BookId bookId = generateValidBookId();
         Review review = testUtils.makeReview(ReviewId.NOT_ASSIGNED, bookId, 43, "patrick" );
 
         ReviewId savedId = reviewRepository.save(review);
 
         assertNotEquals(ReviewId.NOT_ASSIGNED, savedId);
     }
+
+    private BookId generateValidBookId() {
+        Book book = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        return bookRepository.save(book);
+    }
+
+
 }

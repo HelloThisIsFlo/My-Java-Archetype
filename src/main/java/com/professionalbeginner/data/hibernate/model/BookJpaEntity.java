@@ -19,7 +19,7 @@ public class BookJpaEntity {
     private String author;
     private int numPages;
     private double price;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<ReviewJpaEntity> reviews;
 
     protected BookJpaEntity() {}

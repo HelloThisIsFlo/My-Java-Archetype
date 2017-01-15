@@ -62,6 +62,12 @@ public class ReviewTest {
         review.updateRating(null);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void setIdNull() throws Exception {
+        Review review = new Review(validId, validBookId, validUser, validRating);
+        review.setId(null);
+    }
+
     @Test
     public void testEquality() throws Exception {
         // two reviews are equals when their ids are equal

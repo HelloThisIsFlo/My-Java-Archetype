@@ -2,9 +2,7 @@ package com.professionalbeginner.data.hibernate.model;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author Kempenich Florian
@@ -16,14 +14,17 @@ public class ReviewJpaEntity {
     @GeneratedValue
     private Long id;
 
-    private Long bookId;
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
+    private BookJpaEntity book;
+
     private int rating;
     private String reviewer;
 
     protected ReviewJpaEntity() {}
 
     public ReviewJpaEntity(Long bookId, int rating, String reviewerUsername) {
-        this.bookId = bookId;
+        setBookId(bookId);
         this.rating = rating;
         this.reviewer = reviewerUsername;
     }
@@ -32,7 +33,7 @@ public class ReviewJpaEntity {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("bookId", bookId)
+                .add("bookId", book)
                 .add("rating", rating)
                 .add("reviewer", reviewer)
                 .toString();
@@ -47,11 +48,13 @@ public class ReviewJpaEntity {
     }
 
     public Long getBookId() {
-        return bookId;
+        return book.getId();
     }
 
     public void setBookId(Long bookId) {
-        this.bookId = bookId;
+        BookJpaEntity bookJpaEntity = new BookJpaEntity();
+        bookJpaEntity.setId(bookId);
+        this.book = bookJpaEntity;
     }
 
     public int getRating() {
