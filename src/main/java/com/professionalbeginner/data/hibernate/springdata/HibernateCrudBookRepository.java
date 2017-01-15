@@ -1,4 +1,4 @@
-package com.professionalbeginner.data.hibernate;
+package com.professionalbeginner.data.hibernate.springdata;
 
 import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
 import org.springframework.data.repository.CrudRepository;

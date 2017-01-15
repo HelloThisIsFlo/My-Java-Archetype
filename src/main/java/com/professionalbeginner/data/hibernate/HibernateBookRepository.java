@@ -1,6 +1,7 @@
 package com.professionalbeginner.data.hibernate;
 
 import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
+import com.professionalbeginner.data.hibernate.springdata.HibernateCrudBookRepository;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;

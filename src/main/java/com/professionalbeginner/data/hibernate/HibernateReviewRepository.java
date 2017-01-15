@@ -1,6 +1,7 @@
 package com.professionalbeginner.data.hibernate;
 
 import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
+import com.professionalbeginner.data.hibernate.springdata.HibernateCrudReviewRepository;
 import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
