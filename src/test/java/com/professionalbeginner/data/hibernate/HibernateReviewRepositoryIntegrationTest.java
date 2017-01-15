@@ -43,7 +43,7 @@ public class HibernateReviewRepositoryIntegrationTest {
     }
 
     private BookId generateValidBookId() {
-        Book book = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        Book book = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         return bookRepository.save(book);
     }
 

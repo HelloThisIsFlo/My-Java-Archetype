@@ -8,12 +8,18 @@ import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -37,7 +43,7 @@ public class HibernateBookRepositoryIntegrationTest {
 
     @Test
     public void saveAndFind_withoutReviews() throws Exception {
-        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        Book toSave = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         assertEquals(BookId.NOT_ASSIGNED, toSave.id());
 
         BookId savedId = bookRepository.save(toSave);
@@ -52,7 +58,7 @@ public class HibernateBookRepositoryIntegrationTest {
     @Test
     public void saveWithExistingId_updatesExisting() throws Exception {
         // Save book and get id
-        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        Book toSave = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         BookId savedId = bookRepository.save(toSave);
         toSave.setId(savedId);
 
@@ -74,25 +80,15 @@ public class HibernateBookRepositoryIntegrationTest {
     @Test
     public void saveAndFind_withReviews() throws Exception {
         // Get id
-        Book toSave = testUtils.makeDefaultBook(BookId.NOT_ASSIGNED);
+        Book toSave = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         BookId savedId = bookRepository.save(toSave);
         toSave.setId(savedId);
 
         // Create and persist review
-        Review review1 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 44, "mark");
-        Review review2 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 30, "bob");
-        Review review3 = testUtils.makeReview(ReviewId.NOT_ASSIGNED, savedId, 98, "frank");
-        ReviewId id1 = reviewRepository.save(review1);
-        ReviewId id2 = reviewRepository.save(review2);
-        ReviewId id3 = reviewRepository.save(review3);
-        review1.setId(id1);
-        review2.setId(id2);
-        review3.setId(id3);
+        List<Review> reviews = createAndPersistSampleReviews(savedId);
 
         // Add reviews and update version on repo
-        toSave.addReview(review1);
-        toSave.addReview(review2);
-        toSave.addReview(review3);
+        reviews.forEach(toSave::addReview);
         bookRepository.save(toSave);
 
         Book fromRepo = bookRepository.findById(savedId, true);
@@ -101,21 +97,47 @@ public class HibernateBookRepositoryIntegrationTest {
         assertTrue(areBooksSimilar_ignoreReviews(toSave, fromRepo));
     }
 
+    @Test
+    @Ignore
+    public void saveMultiple_findAll_withReviews() throws Exception {
+//        Book book1 = testUtils.makeBook(BookId.NOT_ASSIGNED, randomString(), randomString(), randomPositiveInt(300), randomPositiveInt(180) / 2.0);
+        Book book1 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+
+    }
+
+    @Test
+    @Ignore
+    public void saveMultipleWithReview_findAllWithoutReviews() throws Exception {
+
+    }
+
+    @Test
+    @Ignore
+    public void saveWithReview_findWithout_resultDoesntHaveReviews() throws Exception {
+
+    }
+
+
+    private List<Review> createAndPersistSampleReviews(BookId bookId) {
+        Review review1 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
+        Review review2 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
+        Review review3 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
+        ReviewId id1 = reviewRepository.save(review1);
+        ReviewId id2 = reviewRepository.save(review2);
+        ReviewId id3 = reviewRepository.save(review3);
+        review1.setId(id1);
+        review2.setId(id2);
+        review3.setId(id3);
+
+        return Arrays.asList(review1, review2, review3);
+    }
+
     private boolean areBooksSimilar_ignoreReviews(Book toCheck, Book book) {
         return toCheck.characteristics().title().equals(book.characteristics().title()) &&
                 toCheck.characteristics().author().equals(book.characteristics().author()) &&
                 toCheck.characteristics().numPages() == book.characteristics().numPages() &&
                 Double.compare(toCheck.price().amount(), book.price().amount()) == 0;
     }
-
-
-
-
-
-
-
-
-
 
 //    @Test
 //    public void saveMultiple_findAll() throws Exception {
