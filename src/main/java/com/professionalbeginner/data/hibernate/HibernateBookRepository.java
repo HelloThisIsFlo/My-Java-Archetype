@@ -10,7 +10,9 @@ import com.professionalbeginner.spring.Prod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
 @Prod
 @IntegrationTests
 @Repository
-public class HibernateBookRepository implements BookRepository{
+public class HibernateBookRepository implements BookRepository {
 
     private final JpaMapper jpaMapper;
     private final HibernateCrudBookRepository hibernateCrudBookRepository;
@@ -39,17 +41,19 @@ public class HibernateBookRepository implements BookRepository{
     }
 
     @Override
+    @Transactional // Aspect-oriented annotation that wraps the method call in a transaction
     public Book findById(BookId id, boolean withReviews) {
         BookJpaEntity fromDB = hibernateCrudBookRepository.findOne(id.idLong());
 
-        return jpaMapper.map(fromDB);
+        return jpaMapper.map(fromDB, withReviews);
     }
 
     @Override
+    @Transactional // Aspect-oriented annotation that wraps the method call in a transaction
     public List<Book> findAll(boolean withReviews) {
         List<BookJpaEntity> fromDB = new ArrayList<>();
         hibernateCrudBookRepository.findAll().forEach(fromDB::add);
 
-        return jpaMapper.mapAllToDomain(fromDB);
+        return jpaMapper.mapAllToDomain(fromDB, withReviews);
     }
 }

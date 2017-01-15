@@ -8,8 +8,6 @@ import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +97,7 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveMultiple_findAll_withReviews() throws Exception {
+    public void saveMultiple_findAll_withAndWithoutReviews() throws Exception {
         // Generate random books
         Book book1 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         Book book2 = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
@@ -123,26 +121,43 @@ public class HibernateBookRepositoryIntegrationTest {
         // Update books via Repo
         books.forEach(bookRepository::save);
 
-        // Get all w/ Reviews
-        List<Book> fromRepo = bookRepository.findAll(true);
+        // Get all w/ and w/o Reviews
+        List<Book> withReview = bookRepository.findAll(true);
+        List<Book> withoutReview = bookRepository.findAll(false);
 
 
-        // Assert List contain similar books
+        // Assert List contain similar books w/ Reviews
         books.forEach(
-                book -> assertListContainsSimilarBook_withReviews(book, fromRepo)
+                book -> assertListContainsSimilarBook_withReviews(book, withReview)
         );
+
+        // Assert List contain similar books ignore Reviews, and check review list is empty
+        books.forEach(
+                book -> assertListContainsSimilarBook_ignoreReview(book, withoutReview)
+        );
+        withoutReview.forEach(
+                bookFromDb -> assertTrue("Review list should be empty", bookFromDb.getReviews().isEmpty())
+        );
+
     }
 
     @Test
-    @Ignore
-    public void saveMultipleWithReview_findAllWithoutReviews() throws Exception {
-
-    }
-
-    @Test
-    @Ignore
     public void saveWithReview_findWithout_resultDoesntHaveReviews() throws Exception {
+        // Save book
+        Book book = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        BookId savedId  = bookRepository.save(book);
+        book.setId(savedId);
 
+        // Add review and update on Repo
+        List<Review> reviews = createAndPersistRandomReviews(savedId);
+        reviews.forEach(book::addReview);
+        bookRepository.save(book);
+
+        // Retrieve book w/o Reviews
+        Book fromRepo = bookRepository.findById(savedId, false);
+
+        // Review list empty
+        assertTrue("Review list should be empty", fromRepo.getReviews().isEmpty());
     }
 
 

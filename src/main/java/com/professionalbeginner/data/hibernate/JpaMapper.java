@@ -41,7 +41,7 @@ public class JpaMapper {
         return jpaBook;
     }
 
-    public Book map(BookJpaEntity bookJpaEntity) {
+    public Book map(BookJpaEntity bookJpaEntity, boolean withReviews) {
         Characteristics characteristics = new Characteristics(
                 bookJpaEntity.getTitle(),
                 bookJpaEntity.getAuthor(),
@@ -52,7 +52,14 @@ public class JpaMapper {
 
         Book book = new Book(characteristics, price);
         book.setId(bookId);
-        addAllReviews(book, bookJpaEntity.getReviews());
+        if (withReviews) {
+            /*
+            Reviews are lazily fetched.
+            A call to the `Review` table is only made if `getReviews()` is called on the `bookJpaEntity`.
+            Skipping this part, skips the call to the database.
+            */
+            addAllReviews(book, bookJpaEntity.getReviews());
+        }
 
         return book;
     }
@@ -95,9 +102,9 @@ public class JpaMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<Book> mapAllToDomain(List<BookJpaEntity> jpaEntities) {
+    public List<Book> mapAllToDomain(List<BookJpaEntity> jpaEntities, boolean withReviews) {
         return jpaEntities.stream()
-                .map(this::map)
+                .map(bookJpa -> map(bookJpa, withReviews))
                 .collect(Collectors.toList());
     }
 }
