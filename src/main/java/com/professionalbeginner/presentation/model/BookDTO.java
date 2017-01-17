@@ -1,8 +1,10 @@
 package com.professionalbeginner.presentation.model;
 
+import com.google.common.base.MoreObjects;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * @author Kempenich Florian
@@ -23,6 +25,8 @@ public class BookDTO {
 
     @Min(0)
     private double price;
+
+    private List<ReviewDTO> reviews;
 
     public Long getBookId() {
         return bookId;
@@ -62,5 +66,24 @@ public class BookDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<ReviewDTO> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewDTO> reviews) {
+        this.reviews = reviews;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("bookId", bookId)
+                .add("title", title)
+                .add("author", author)
+                .add("numPages", numPages)
+                .add("price", price)
+                .toString();
     }
 }

@@ -5,6 +5,7 @@ import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.review.Rating;
 import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.presentation.model.BookDTO;
 import com.professionalbeginner.presentation.Assembler;
 import org.slf4j.Logger;
@@ -44,12 +45,9 @@ public class ApiController {
 
     @RequestMapping("/books/detail")
     @ResponseStatus(HttpStatus.OK)
-    public BookDTO getBookDetails(@RequestParam("bookId") Long bookId) throws Exception{
-        // TODO: 1/17/2017 Cleanify
+    public BookDTO getBookDetails(@RequestParam("bookId") Long bookId) throws BookNotFoundException {
+        // TODO: 1/17/2017 add average rating
         Book book = bookService.getDetails(new BookId(bookId));
-
-        LOG.info(book.getReviews().toString());
-
         return bookAssembler.toDTO(book);
     }
 
@@ -62,6 +60,15 @@ public class ApiController {
         User reviewer = new User("patrick");
         bookService.addNewReview(id, rating, reviewer);
     }
+
+    public void createNewBook() {
+        // TODO: 1/17/2017 todo
+    }
+
+    public void addNewReview() {
+        // TODO: 1/17/2017
+    }
+
 
 
 }
