@@ -1,13 +1,14 @@
-package com.professionalbeginner.presentation.model;
+package com.professionalbeginner.presentation;
 
 import com.professionalbeginner.domain.core.book.Book;
+import com.professionalbeginner.presentation.model.BookDTO;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Kempenich Florian
  */
 @Component
-public class BookDTOAssembler {
+public class Assembler {
 
     public BookDTO toDTO(Book book) {
         BookDTO bookDTO = new BookDTO();

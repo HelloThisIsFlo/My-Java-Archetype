@@ -6,7 +6,7 @@ import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.review.Rating;
 import com.professionalbeginner.domain.core.review.User;
 import com.professionalbeginner.presentation.model.BookDTO;
-import com.professionalbeginner.presentation.model.BookDTOAssembler;
+import com.professionalbeginner.presentation.Assembler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ApiController {
     @Autowired
     BookService bookService;
     @Autowired
-    BookDTOAssembler bookAssembler;
+    Assembler bookAssembler;
 
     @RequestMapping("/books")
     @ResponseStatus(HttpStatus.OK)
