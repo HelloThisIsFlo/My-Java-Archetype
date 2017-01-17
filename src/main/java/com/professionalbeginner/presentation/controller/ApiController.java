@@ -3,20 +3,21 @@ package com.professionalbeginner.presentation.controller;
 import com.professionalbeginner.domain.applicationlayer.BookService;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
+import com.professionalbeginner.domain.core.book.Characteristics;
+import com.professionalbeginner.domain.core.book.Price;
 import com.professionalbeginner.domain.core.review.Rating;
 import com.professionalbeginner.domain.core.review.User;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
-import com.professionalbeginner.presentation.model.BookDTO;
 import com.professionalbeginner.presentation.Assembler;
+import com.professionalbeginner.presentation.model.BookDTO;
+import com.professionalbeginner.presentation.model.BookDetailsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,19 +40,19 @@ public class ApiController {
         List<Book> allBooks = bookService.getAllBooks();
 
         return allBooks.stream()
-                .map(bookAssembler::toDTO)
+                .map(bookAssembler::toBookDTO)
                 .collect(Collectors.toList());
     }
 
     @RequestMapping("/books/detail")
     @ResponseStatus(HttpStatus.OK)
-    public BookDTO getBookDetails(@RequestParam("bookId") Long id) throws BookNotFoundException {
+    public BookDetailsDTO getBookDetails(@RequestParam("bookId") Long id) throws BookNotFoundException {
         BookId bookId = new BookId(id);
 
         Book book = bookService.getDetails(bookId);
         double avgRating = bookService.getAverageRating(bookId);
 
-        return bookAssembler.toDTO(book, avgRating);
+        return bookAssembler.toBookDetailsDTO(book, avgRating);
     }
 
     @RequestMapping("/test")
@@ -64,8 +65,20 @@ public class ApiController {
         bookService.addNewReview(id, rating, reviewer);
     }
 
-    public void createNewBook() {
-        // TODO: 1/17/2017 todo
+    @RequestMapping(value = "/books/new", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public BookDTO createNewBook(@RequestBody @Valid BookDTO bookDTO) {
+        Characteristics characteristics = new Characteristics(
+                bookDTO.getTitle(),
+                bookDTO.getAuthor(),
+                bookDTO.getNumPages()
+        );
+        Price price = new Price(bookDTO.getPrice());
+
+        BookId id = bookService.createNewBookEntry(characteristics, price);
+
+        bookDTO.setBookId(id.idLong());
+        return bookDTO;
     }
 
     public void addNewReview() {

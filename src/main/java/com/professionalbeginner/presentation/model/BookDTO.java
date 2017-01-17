@@ -4,14 +4,12 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
-import java.util.List;
 
 /**
  * @author Kempenich Florian
  */
 public class BookDTO {
 
-    @Min(1)
     private Long bookId;
 
     @NotEmpty
@@ -25,10 +23,6 @@ public class BookDTO {
 
     @Min(0)
     private double price;
-
-    private List<ReviewDTO> reviews;
-
-    private double avgRating;
 
     public Long getBookId() {
         return bookId;
@@ -68,22 +62,6 @@ public class BookDTO {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public List<ReviewDTO> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<ReviewDTO> reviews) {
-        this.reviews = reviews;
-    }
-
-    public double getAvgRating() {
-        return avgRating;
-    }
-
-    public void setAvgRating(double avgRating) {
-        this.avgRating = avgRating;
     }
 
     @Override
