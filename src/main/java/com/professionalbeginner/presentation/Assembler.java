@@ -31,6 +31,12 @@ public class Assembler {
         return bookDTO;
     }
 
+    public BookDTO toDTO(Book book, double avgRating) {
+        BookDTO bookDTO = toDTO(book);
+        bookDTO.setAvgRating(avgRating);
+        return bookDTO;
+    }
+
     public ReviewDTO toDTO(Review review) {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setBookId(review.getBookId().idLong());

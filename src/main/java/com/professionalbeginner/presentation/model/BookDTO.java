@@ -28,6 +28,8 @@ public class BookDTO {
 
     private List<ReviewDTO> reviews;
 
+    private double avgRating;
+
     public Long getBookId() {
         return bookId;
     }
@@ -74,6 +76,14 @@ public class BookDTO {
 
     public void setReviews(List<ReviewDTO> reviews) {
         this.reviews = reviews;
+    }
+
+    public double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(double avgRating) {
+        this.avgRating = avgRating;
     }
 
     @Override

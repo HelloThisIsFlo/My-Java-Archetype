@@ -45,10 +45,13 @@ public class ApiController {
 
     @RequestMapping("/books/detail")
     @ResponseStatus(HttpStatus.OK)
-    public BookDTO getBookDetails(@RequestParam("bookId") Long bookId) throws BookNotFoundException {
-        // TODO: 1/17/2017 add average rating
-        Book book = bookService.getDetails(new BookId(bookId));
-        return bookAssembler.toDTO(book);
+    public BookDTO getBookDetails(@RequestParam("bookId") Long id) throws BookNotFoundException {
+        BookId bookId = new BookId(id);
+
+        Book book = bookService.getDetails(bookId);
+        double avgRating = bookService.getAverageRating(bookId);
+
+        return bookAssembler.toDTO(book, avgRating);
     }
 
     @RequestMapping("/test")
