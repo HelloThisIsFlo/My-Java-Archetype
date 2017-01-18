@@ -3,18 +3,12 @@ package com.professionalbeginner.data.inmemory;
 import com.professionalbeginner.TestUtils;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
+import com.professionalbeginner.domain.core.book.Review;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.beans.factory.access.BootstrapException;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -50,7 +44,7 @@ public class InMemoryBookRepositoryTest {
         book.setId(savedId);
 
         // Add reviews
-        createRandomReviewWithRadomId(savedId).forEach(book::addReview);
+        createRandomReviews(savedId).forEach(book::addReview);
         bookRepository.save(book);
 
         Book fromRepoWithReviews = bookRepository.findById(savedId, true);
@@ -93,7 +87,7 @@ public class InMemoryBookRepositoryTest {
         List<Book> books = Arrays.asList(book1, book2, book3);
 
         // Add reviews to first book
-        createRandomReviewWithRadomId(savedId1).forEach(book1::addReview);
+        createRandomReviews(savedId1).forEach(book1::addReview);
         bookRepository.save(book1);
 
 
@@ -119,22 +113,11 @@ public class InMemoryBookRepositoryTest {
         assertTrue(errorMessage, second.containsAll(first));
     }
 
-    private List<Review> createRandomReviewWithRadomId(BookId bookId) {
-        Review review1 = testUtils.makeRandomReview(randomId(), bookId);
-        Review review2 = testUtils.makeRandomReview(randomId(), bookId);
-        Review review3 = testUtils.makeRandomReview(randomId(), bookId);
+    private List<Review> createRandomReviews(BookId bookId) {
+        Review review1 = testUtils.makeRandomReview(bookId);
+        Review review2 = testUtils.makeRandomReview(bookId);
+        Review review3 = testUtils.makeRandomReview(bookId);
         return Arrays.asList(review1, review2, review3);
-    }
-
-    private ReviewId randomId() {
-        long rand = random.nextInt(999) + 1;
-        return new ReviewId(rand);
-    }
-
-    private void assertListContainsSimilarBook_withReviews(Book toCheck, List<Book> bookList) {
-        boolean contains = bookList.stream()
-                .anyMatch(book -> areBooksSimilar(toCheck, book));
-        assertTrue("List does not contain book: " + toCheck, contains);
     }
 
     private void assertListContainsSimilarBook_ignoreReview(Book toCheck, List<Book> bookList) {

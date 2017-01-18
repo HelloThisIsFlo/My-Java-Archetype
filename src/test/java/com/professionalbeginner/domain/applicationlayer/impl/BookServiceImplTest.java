@@ -1,17 +1,14 @@
 package com.professionalbeginner.domain.applicationlayer.impl;
 
 import com.professionalbeginner.TestUtils;
-import com.professionalbeginner.data.inmemory.FakeReviewRepository;
 import com.professionalbeginner.data.inmemory.InMemoryBookRepository;
 import com.professionalbeginner.domain.applicationlayer.BookService;
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.*;
+import com.professionalbeginner.domain.core.book.*;
+import com.professionalbeginner.domain.core.review.IllegalReviewException;
+import com.professionalbeginner.domain.core.review.Rating;
+import com.professionalbeginner.domain.core.review.User;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
 import com.professionalbeginner.statisticsmodule.StatisticsContractImpl;
 import org.junit.Before;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kempenich Florian
@@ -29,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 public class BookServiceImplTest {
 
     private BookRepository bookRepository;
-    private ReviewRepository reviewRepository;
     private BookService bookService;
 
     private TestUtils testUtils;
@@ -39,9 +34,8 @@ public class BookServiceImplTest {
         testUtils = new TestUtils();
 
         bookRepository = new InMemoryBookRepository();
-        reviewRepository = new FakeReviewRepository();
         StatisticsContract statistics = new StatisticsContractImpl();
-        bookService = new BookServiceImpl(bookRepository, reviewRepository, statistics);
+        bookService = new BookServiceImpl(bookRepository, statistics);
     }
 
 
@@ -87,7 +81,7 @@ public class BookServiceImplTest {
         Book fakeBook = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         BookId bookId = bookRepository.save(fakeBook);
         fakeBook.setId(bookId);
-        Review review = testUtils.makeReview(new ReviewId(123L), bookId, rating, reviewer);
+        Review review = testUtils.makeReview(bookId, rating, reviewer);
         fakeBook.addReview(review);
         bookRepository.save(fakeBook);
         return bookId;

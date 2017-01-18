@@ -1,14 +1,10 @@
 package com.professionalbeginner.domain.applicationlayer.impl;
 
 import com.professionalbeginner.domain.applicationlayer.BookService;
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
+import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.review.*;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +18,12 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final ReviewRepository reviewRepository;
 
     private final StatisticsContract statistics;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, ReviewRepository reviewRepository, StatisticsContract statistics) {
+    public BookServiceImpl(BookRepository bookRepository, StatisticsContract statistics) {
         this.bookRepository = bookRepository;
-        this.reviewRepository = reviewRepository;
         this.statistics = statistics;
     }
 
@@ -53,19 +47,12 @@ public class BookServiceImpl implements BookService {
     public void addNewReview(BookId bookId, Rating rating, User reviewer) throws IllegalReviewException {
         try {
             Book fromRepo = bookRepository.findById(bookId, true);
-            Review toAdd = createAndPersistReview(bookId, rating, reviewer);
+            Review toAdd = new Review(bookId, reviewer, rating);
             fromRepo.addReview(toAdd);
             bookRepository.save(fromRepo);
         } catch (BookNotFoundException e) {
             throw new IllegalReviewException("Book not found");
         }
-    }
-
-    private Review createAndPersistReview(BookId bookId, Rating rating, User reviewer) {
-        Review toAdd = new Review(ReviewId.NOT_ASSIGNED, bookId, reviewer, rating);
-        ReviewId reviewId = reviewRepository.save(toAdd);
-        toAdd.setId(reviewId);
-        return toAdd;
     }
 
     @Override

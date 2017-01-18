@@ -1,14 +1,13 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
-import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner._other.ddd.Entity;
 import com.professionalbeginner.domain.core.review.IllegalReviewException;
-import com.professionalbeginner.domain.core.review.Review;
 import com.professionalbeginner.domain.core.review.User;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,12 +30,12 @@ public class Book implements Entity<Book> {
 
     private Characteristics characteristics;
     private Price price;
-    private Map<ReviewId, ReviewVO> reviews;
+    private List<Review> reviews;
 
     public Book(Characteristics characteristics, Price price) {
         this.characteristics = checkNotNull(characteristics);
         this.price = checkNotNull(price);
-        this.reviews = new HashMap<>();
+        this.reviews = new ArrayList<>();
     }
 
     public void setId(BookId id) {
@@ -83,33 +82,12 @@ public class Book implements Entity<Book> {
     }
 
     public List<Review> getReviews() {
-        return reviews.values().stream()
-                .map(this::map)
-                .collect(Collectors.toList());
-    }
-
-    private Review map(ReviewVO vo) {
-        return new Review(
-                findId(vo),
-                vo.getBookId(),
-                vo.getReviewer(),
-                vo.getRating()
-        );
-    }
-
-    private ReviewId findId(ReviewVO candidate) {
-        for (Map.Entry<ReviewId, ReviewVO> reviewIdReviewVOEntry : reviews.entrySet()) {
-            if (reviewIdReviewVOEntry.getValue().equals(candidate)) {
-                return reviewIdReviewVOEntry.getKey();
-            }
-        }
-        return null;
+        return reviews;
     }
 
     public void addReview(Review review) {
         checkIfValid(review);
-        ReviewVO vo = new ReviewVO(review.getBookId(), review.getReviewer(), review.getRating());
-        reviews.put(review.getId(), vo);
+        reviews.add(review);
     }
 
     public void updatePrice(Price newPrice) {
@@ -117,15 +95,8 @@ public class Book implements Entity<Book> {
     }
 
     private void checkIfValid(Review review) {
-        checkIfReviewHasPersistedId(review);
         checkIfCorrectBookId(review);
         checkIfNoExistingReview(review);
-    }
-
-    private void checkIfReviewHasPersistedId(Review review) {
-        if (review.getId().sameValueAs(ReviewId.NOT_ASSIGNED)) {
-            throw new IllegalReviewException("Cannot accept a review with un-assigned id, persist it first", review);
-        }
     }
 
     private void checkIfCorrectBookId(Review review) {
@@ -136,10 +107,9 @@ public class Book implements Entity<Book> {
 
     private void checkIfNoExistingReview(Review review) {
         User user = review.getReviewer();
-        reviews.values().stream()
+        reviews.stream()
                 .filter(r -> r.getReviewer().sameValueAs(user))
                 .findAny()
-                .map(this::map)
                 .ifPresent(existingReview -> {
                     throw new IllegalReviewException("Review existing for this book for this user", existingReview);
                 });

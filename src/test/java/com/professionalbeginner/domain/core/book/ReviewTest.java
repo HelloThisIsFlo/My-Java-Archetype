@@ -2,8 +2,6 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
 import com.professionalbeginner.domain.core.review.Rating;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner.domain.core.review.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +11,8 @@ import static org.junit.Assert.*;
 /**
  * @author Florian Kempenich
  */
-public class ReviewVOTest {
+public class ReviewTest {
 
-    private ReviewId validId;
     private BookId validBookId;
     private User validUser;
     private Rating validRating;
@@ -30,7 +27,6 @@ public class ReviewVOTest {
 
     @Before
     public void setUp() throws Exception {
-        validId = new ReviewId(234L);
         validBookId = new BookId(123L);
         validUser = new User("Patrick");
         validRating = new Rating(3);
@@ -46,12 +42,12 @@ public class ReviewVOTest {
     }
 
     private void assertValid(BookId bookId, Rating rating, User user) {
-        new ReviewVO(bookId, user, rating);
+        new Review(bookId, user, rating);
     }
 
     private void assertInvalid(BookId bookId, Rating rating, User user) {
         try {
-            new ReviewVO(bookId, user, rating);
+            new Review(bookId, user, rating);
             fail("Should throw exception");
         } catch (NullPointerException e) {
             // expected
@@ -60,7 +56,7 @@ public class ReviewVOTest {
 
     @Test(expected = NullPointerException.class)
     public void setRatingNull() throws Exception {
-        ReviewVO review = new ReviewVO(validBookId, validUser, validRating);
+        Review review = new Review(validBookId, validUser, validRating);
         review.updateRating(null);
     }
 
@@ -72,8 +68,8 @@ public class ReviewVOTest {
         User validUser2 = new User("Florian");
 
         new EqualsTester()
-                .addEqualityGroup(new ReviewVO(new BookId(567L), validUser, validRating), new ReviewVO(new BookId(567L), validUser, validRating))
-                .addEqualityGroup(new ReviewVO(new BookId(567L), validUser2, validRating2), new ReviewVO(new BookId(567L), validUser2, validRating2))
+                .addEqualityGroup(new Review(new BookId(567L), validUser, validRating), new Review(new BookId(567L), validUser, validRating))
+                .addEqualityGroup(new Review(new BookId(567L), validUser2, validRating2), new Review(new BookId(567L), validUser2, validRating2))
                 .testEquals();
     }
 
