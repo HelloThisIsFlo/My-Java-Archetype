@@ -4,8 +4,8 @@ import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Characteristics;
 import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.IllegalReviewException;
-import com.professionalbeginner.domain.core.review.Rating;
+import com.professionalbeginner.domain.core.book.IllegalReviewException;
+import com.professionalbeginner.domain.core.book.Rating;
 import com.professionalbeginner.domain.core.review.User;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 

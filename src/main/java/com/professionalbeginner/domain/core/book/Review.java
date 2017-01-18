@@ -2,7 +2,6 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner._other.ddd.ValueObject;
-import com.professionalbeginner.domain.core.review.Rating;
 import com.professionalbeginner.domain.core.review.User;
 
 import java.util.Objects;

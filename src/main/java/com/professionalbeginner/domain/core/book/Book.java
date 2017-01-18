@@ -2,7 +2,6 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner._other.ddd.Entity;
-import com.professionalbeginner.domain.core.review.IllegalReviewException;
 import com.professionalbeginner.domain.core.review.User;
 
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Kempenich Florian
+ *
+ * Aggregate Root of the Book Aggregate
  */
 public class Book implements Entity<Book> {
 

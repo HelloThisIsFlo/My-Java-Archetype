@@ -3,7 +3,7 @@ package com.professionalbeginner.data.hibernate;
 import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
 import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
 import com.professionalbeginner.domain.core.book.*;
-import com.professionalbeginner.domain.core.review.Rating;
+import com.professionalbeginner.domain.core.book.Rating;
 import com.professionalbeginner.domain.core.review.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

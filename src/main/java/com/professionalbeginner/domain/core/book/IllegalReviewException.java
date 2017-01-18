@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.book;
 
 import com.professionalbeginner.domain.core.book.Review;
 
