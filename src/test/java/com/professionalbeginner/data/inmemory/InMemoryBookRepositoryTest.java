@@ -101,6 +101,30 @@ public class InMemoryBookRepositoryTest {
         withoutReviews.forEach(this::assertReviewListEmtpy);
     }
 
+    @Test
+    public void idAreUnique() throws Exception {
+        Book first = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        Book second = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+
+        BookId firstId = bookRepository.save(first);
+        BookId secondId = bookRepository.save(second);
+
+        assertNotEquals(firstId, BookId.NOT_ASSIGNED);
+        assertNotEquals(secondId, BookId.NOT_ASSIGNED);
+        assertNotEquals(firstId, secondId);
+    }
+
+    @Test
+    public void idIsUpdatedOnSavedBooks() throws Exception {
+        Book toSave = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        bookRepository.save(toSave);
+
+        List<Book> fromRepo = bookRepository.findAll(false);
+        assertEquals(1, fromRepo.size());
+        Book savedBook = fromRepo.get(0);
+        assertNotEquals(savedBook.id(), BookId.NOT_ASSIGNED);
+    }
+
     private void assertReviewListEmtpy(Book book) {
         assertTrue("Review list should be empty", book.getReviews().isEmpty());
     }

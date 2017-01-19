@@ -1,18 +1,21 @@
 package com.professionalbeginner.data.inmemory;
 
+import com.professionalbeginner._other.spring.Dev;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author Kempenich Florian
  */
+@Dev
+@Repository
 public class InMemoryBookRepository implements BookRepository {
 
     private List<Book> books;
@@ -50,8 +53,10 @@ public class InMemoryBookRepository implements BookRepository {
 
     private BookId saveNew(Book book) {
         long id = books.size() + 1;
+        BookId bookId = new BookId(id);
+        book.setId(bookId);
         books.add(book);
-        return new BookId(id);
+        return bookId;
     }
 
     @Override
@@ -80,6 +85,8 @@ public class InMemoryBookRepository implements BookRepository {
     }
 
     private Book copyWithoutReviews(Book book) {
-        return new Book(book.characteristics(), book.price());
+        Book copy = new Book(book.characteristics(), book.price());
+        copy.setId(book.id());
+        return copy;
     }
 }
