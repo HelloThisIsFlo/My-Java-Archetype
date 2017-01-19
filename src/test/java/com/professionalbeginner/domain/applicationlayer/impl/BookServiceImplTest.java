@@ -6,7 +6,7 @@ import com.professionalbeginner.domain.applicationlayer.BookService;
 import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.book.IllegalReviewException;
 import com.professionalbeginner.domain.core.book.Rating;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
@@ -89,20 +89,20 @@ public class BookServiceImplTest {
 
     @Test(expected = IllegalReviewException.class)
     public void addReview_BookNotFound() throws Exception {
-        bookService.addNewReview(new BookId(999L), new Rating(11), new User("patrick"));
+        bookService.addNewReview(new BookId(999L), new Rating(11), new UserId("patrick"));
     }
 
     @Test(expected = IllegalReviewException.class)
     public void addReview_existingReviewForUse() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(12, "frank");
-        bookService.addNewReview(id, new Rating(33), new User("frank"));
+        bookService.addNewReview(id, new Rating(33), new UserId("frank"));
     }
 
     @Test
     public void addReview() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(34, "frank");
 
-        bookService.addNewReview(id, new Rating(99), new User("Mark"));
+        bookService.addNewReview(id, new Rating(99), new UserId("Mark"));
 
         Book fromService = bookService.getDetails(id);
         assertEquals(2, fromService.getReviews().size());
@@ -116,7 +116,7 @@ public class BookServiceImplTest {
     @Test
     public void getAverageRating() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(80, "frank");
-        bookService.addNewReview(id, new Rating(90), new User("mark"));
+        bookService.addNewReview(id, new Rating(90), new UserId("mark"));
 
         assertEquals(85, bookService.getAverageRating(id), 0);
     }

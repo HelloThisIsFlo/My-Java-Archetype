@@ -2,7 +2,7 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
 import com.professionalbeginner._other.ddd.ValueObject;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 
 import java.util.Objects;
 
@@ -15,15 +15,15 @@ public class Review implements ValueObject<Review> {
 
     public static final Review NULL = new Review(
             BookId.NOT_ASSIGNED,
-            new User("-1"),
+            new UserId("-1"),
             new Rating(0)
     );
 
     private BookId bookId;
     private Rating rating;
-    private User reviewer;
+    private UserId reviewer;
 
-    public Review(BookId bookId, User reviewer, Rating rating) {
+    public Review(BookId bookId, UserId reviewer, Rating rating) {
         this.bookId = checkNotNull(bookId);
         updateRating(rating);
         this.reviewer = checkNotNull(reviewer);
@@ -41,7 +41,7 @@ public class Review implements ValueObject<Review> {
         this.rating = checkNotNull(rating);
     }
 
-    public User getReviewer() {
+    public UserId getReviewer() {
         return reviewer;
     }
 

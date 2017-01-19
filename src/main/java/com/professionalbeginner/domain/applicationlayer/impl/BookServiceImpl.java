@@ -2,7 +2,7 @@ package com.professionalbeginner.domain.applicationlayer.impl;
 
 import com.professionalbeginner.domain.applicationlayer.BookService;
 import com.professionalbeginner.domain.core.book.*;
-import com.professionalbeginner.domain.core.review.*;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
 import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addNewReview(BookId bookId, Rating rating, User reviewer) throws IllegalReviewException {
+    public void addNewReview(BookId bookId, Rating rating, UserId reviewer) throws IllegalReviewException {
         try {
             Book fromRepo = bookRepository.findById(bookId, true);
             Review toAdd = new Review(bookId, reviewer, rating);

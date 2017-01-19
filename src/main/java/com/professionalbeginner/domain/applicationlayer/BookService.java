@@ -6,7 +6,7 @@ import com.professionalbeginner.domain.core.book.Characteristics;
 import com.professionalbeginner.domain.core.book.Price;
 import com.professionalbeginner.domain.core.book.IllegalReviewException;
 import com.professionalbeginner.domain.core.book.Rating;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public interface BookService {
      *         In case there is an existing review for this user on this book.
      *         Or if book is not found
      */
-    void addNewReview(BookId bookId, Rating rating, User reviewer) throws IllegalReviewException;
+    void addNewReview(BookId bookId, Rating rating, UserId reviewer) throws IllegalReviewException;
 
     /**
      * Computes the average rating for a book

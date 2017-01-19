@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.user;
 
 import com.google.common.testing.EqualsTester;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Kempenich Florian
  */
-public class UserTest {
+public class UserIdTest {
 
     @Test(expected = NullPointerException.class)
     public void testValidity() throws Exception {
@@ -22,19 +22,19 @@ public class UserTest {
     @Test
     public void testEquality() throws Exception {
         new EqualsTester()
-                .addEqualityGroup(new User("patrick"), new User("patrick"))
-                .addEqualityGroup(new User("florian"), new User("florian"))
+                .addEqualityGroup(new UserId("patrick"), new UserId("patrick"))
+                .addEqualityGroup(new UserId("florian"), new UserId("florian"))
                 .testEquals();
 
     }
 
     private void assertValid(String username) {
-        new User(username);
+        new UserId(username);
     }
 
     private void assertInvalid(String username) {
         try {
-            new User(username);
+            new UserId(username);
             fail("Should throw exception");
         } catch (IllegalArgumentException e) {
             // expected

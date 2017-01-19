@@ -1,7 +1,6 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
-import com.professionalbeginner.domain.core.book.Rating;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

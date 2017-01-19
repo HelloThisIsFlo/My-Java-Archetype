@@ -4,7 +4,7 @@ import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
 import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
 import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.book.Rating;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -80,7 +80,7 @@ public class JpaMapper {
 
     public Review map(ReviewJpaEntity reviewJpaEntity) {
         BookId bookId = new BookId(reviewJpaEntity.getBookId());
-        User reviewer = new User(reviewJpaEntity.getReviewer());
+        UserId reviewer = new UserId(reviewJpaEntity.getReviewer());
         Rating rating = new Rating(reviewJpaEntity.getRating());
 
         return new Review(bookId, reviewer, rating);

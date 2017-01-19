@@ -1,7 +1,7 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class ReviewTest {
 
     private BookId validBookId;
-    private User validUser;
+    private UserId validUserId;
     private Rating validRating;
 
     /*
@@ -27,26 +27,26 @@ public class ReviewTest {
     @Before
     public void setUp() throws Exception {
         validBookId = new BookId(123L);
-        validUser = new User("Patrick");
+        validUserId = new UserId("Patrick");
         validRating = new Rating(3);
     }
 
     @Test
     public void testCreateInstance() throws Exception {
-        assertValid(validBookId, validRating, validUser);
+        assertValid(validBookId, validRating, validUserId);
 
-        assertInvalid(null, validRating, validUser);
-        assertInvalid(validBookId, null, validUser);
+        assertInvalid(null, validRating, validUserId);
+        assertInvalid(validBookId, null, validUserId);
         assertInvalid(validBookId, validRating, null);
     }
 
-    private void assertValid(BookId bookId, Rating rating, User user) {
-        new Review(bookId, user, rating);
+    private void assertValid(BookId bookId, Rating rating, UserId userId) {
+        new Review(bookId, userId, rating);
     }
 
-    private void assertInvalid(BookId bookId, Rating rating, User user) {
+    private void assertInvalid(BookId bookId, Rating rating, UserId userId) {
         try {
-            new Review(bookId, user, rating);
+            new Review(bookId, userId, rating);
             fail("Should throw exception");
         } catch (NullPointerException e) {
             // expected
@@ -55,7 +55,7 @@ public class ReviewTest {
 
     @Test(expected = NullPointerException.class)
     public void setRatingNull() throws Exception {
-        Review review = new Review(validBookId, validUser, validRating);
+        Review review = new Review(validBookId, validUserId, validRating);
         review.updateRating(null);
     }
 
@@ -64,11 +64,11 @@ public class ReviewTest {
         // two reviews are equals when their ids are equal
 
         Rating validRating2 = new Rating(45);
-        User validUser2 = new User("Florian");
+        UserId validUserId2 = new UserId("Florian");
 
         new EqualsTester()
-                .addEqualityGroup(new Review(new BookId(567L), validUser, validRating), new Review(new BookId(567L), validUser, validRating))
-                .addEqualityGroup(new Review(new BookId(567L), validUser2, validRating2), new Review(new BookId(567L), validUser2, validRating2))
+                .addEqualityGroup(new Review(new BookId(567L), validUserId, validRating), new Review(new BookId(567L), validUserId, validRating))
+                .addEqualityGroup(new Review(new BookId(567L), validUserId2, validRating2), new Review(new BookId(567L), validUserId2, validRating2))
                 .testEquals();
     }
 

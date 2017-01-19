@@ -2,7 +2,7 @@ package com.professionalbeginner;
 
 import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.book.Rating;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner._other.spring.IntegrationTests;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class TestUtils {
     }
 
     public Review makeReview(BookId bookId, int rating, String reviewerName) {
-        return new Review(bookId, new User(reviewerName), new Rating(rating));
+        return new Review(bookId, new UserId(reviewerName), new Rating(rating));
     }
 
     public Review makeRandomReview(BookId bookId) {

@@ -2,7 +2,7 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
 import com.professionalbeginner.TestUtils;
-import com.professionalbeginner.domain.core.review.*;
+import com.professionalbeginner.domain.core.user.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class BookTest {
 
     private Characteristics validCharact;
     private Price validPrice;
-    private User validUser;
+    private UserId validUserId;
     private Book validBook;
 
     private TestUtils testUtils;
@@ -36,7 +36,7 @@ public class BookTest {
         );
         BookId id = new BookId(123L);
         validBook.setId(id);
-        validUser = new User("pedro");
+        validUserId = new UserId("pedro");
     }
 
     @Test
@@ -145,10 +145,10 @@ public class BookTest {
 
     @Test
     public void addReview_existingReviewForUser_throwException() throws Exception {
-        Review initialReview = testUtils.makeReview(validBook.id(), 45 ,validUser.username());
+        Review initialReview = testUtils.makeReview(validBook.id(), 45 , validUserId.username());
         validBook.addReview(initialReview);
 
-        Review reviewWithExistingUser = testUtils.makeReview(validBook.id(), 55 ,validUser.username());
+        Review reviewWithExistingUser = testUtils.makeReview(validBook.id(), 55 , validUserId.username());
 
         try {
             validBook.addReview(reviewWithExistingUser);
