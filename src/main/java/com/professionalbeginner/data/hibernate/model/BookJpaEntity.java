@@ -9,9 +9,11 @@ import java.util.List;
  * @author Kempenich Florian
  */
 @Entity
+@Table(name = "book")
 public class BookJpaEntity {
 
     @Id
+
     @GeneratedValue
     private Long id;
 
@@ -19,7 +21,12 @@ public class BookJpaEntity {
     private String author;
     private int numPages;
     private double price;
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @OneToMany(
+            mappedBy = "book",
+            fetch = FetchType.LAZY,
+            cascade = javax.persistence.CascadeType.ALL,
+            orphanRemoval = true)
     private List<ReviewJpaEntity> reviews;
 
     protected BookJpaEntity() {}

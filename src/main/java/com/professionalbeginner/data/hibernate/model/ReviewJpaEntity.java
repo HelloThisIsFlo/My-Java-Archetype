@@ -8,6 +8,7 @@ import javax.persistence.*;
  * @author Kempenich Florian
  */
 @Entity
+@Table(name = "review")
 public class ReviewJpaEntity {
 
     @Id
@@ -23,8 +24,8 @@ public class ReviewJpaEntity {
 
     protected ReviewJpaEntity() {}
 
-    public ReviewJpaEntity(Long bookId, int rating, String reviewerUsername) {
-        setBookId(bookId);
+    public ReviewJpaEntity(BookJpaEntity book, int rating, String reviewerUsername) {
+        this.book = book;
         this.rating = rating;
         this.reviewer = reviewerUsername;
     }
@@ -47,15 +48,12 @@ public class ReviewJpaEntity {
         this.id = id;
     }
 
-    public Long getBookId() {
-        return book.getId();
+    public BookJpaEntity getBook() {
+        return book;
     }
 
-    public void setBookId(Long bookId) {
-        // TODO: Clean up ?
-        BookJpaEntity bookJpaEntity = new BookJpaEntity();
-        bookJpaEntity.setId(bookId);
-        this.book = bookJpaEntity;
+    public void setBook(BookJpaEntity book) {
+        this.book = book;
     }
 
     public int getRating() {
