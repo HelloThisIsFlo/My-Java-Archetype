@@ -2,10 +2,7 @@ package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
 import com.professionalbeginner.TestUtils;
-import com.professionalbeginner.domain.core.review.IllegalReviewException;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +19,7 @@ public class BookTest {
 
     private Characteristics validCharact;
     private Price validPrice;
-    private User validUser;
+    private UserId validUserId;
     private Book validBook;
 
     private TestUtils testUtils;
@@ -39,7 +36,7 @@ public class BookTest {
         );
         BookId id = new BookId(123L);
         validBook.setId(id);
-        validUser = new User("pedro");
+        validUserId = new UserId("pedro");
     }
 
     @Test
@@ -113,9 +110,9 @@ public class BookTest {
         assertEquals(Collections.emptyList(), validBook.getReviews());
 
         BookId id = validBook.id();
-        Review review1 = testUtils.makeReview(new ReviewId(1L), id, 42, "mark");
-        Review review2 = testUtils.makeReview(new ReviewId(2L), id, 12, "patrick");
-        Review review3 = testUtils.makeReview(new ReviewId(3L), id, 16, "flo");
+        Review review1 = testUtils.makeReview(id, 42, "mark");
+        Review review2 = testUtils.makeReview(id, 12, "patrick");
+        Review review3 = testUtils.makeReview(id, 16, "flo");
 
         List<Review> expected = new ArrayList<>(3);
         expected.add(review1);
@@ -126,7 +123,8 @@ public class BookTest {
         validBook.addReview(review2);
         validBook.addReview(review3);
 
-        assertEquals(expected, validBook.getReviews());
+        assertTrue("Lists should be equals", expected.containsAll(validBook.getReviews()));
+        assertTrue("Lists should be equals", validBook.getReviews().containsAll(expected));
     }
 
     @Test
@@ -134,60 +132,31 @@ public class BookTest {
         BookId wrongId = new BookId(345L);
         assertNotEquals(validBook.id(), wrongId);
 
-        Review reviewWithWrongId = testUtils.makeReview(new ReviewId(452L), wrongId, 24, "mark");
+        Review reviewWithWrongId = testUtils.makeReview(wrongId, 24, "mark");
 
         try {
             validBook.addReview(reviewWithWrongId);
             fail("Should throw exception");
         } catch (IllegalReviewException e) {
             assertEquals("Wrong Book Id", e.getMessage());
-            assertEquals(reviewWithWrongId.getId(), e.getReview().getId());
+            assertEquals(reviewWithWrongId, e.getReview());
         }
     }
 
     @Test
     public void addReview_existingReviewForUser_throwException() throws Exception {
-        ReviewId initialId = new ReviewId(123L);
-        Review initialReview = testUtils.makeReview(initialId, validBook.id(), 45 ,validUser.username());
+        Review initialReview = testUtils.makeReview(validBook.id(), 45 , validUserId.username());
         validBook.addReview(initialReview);
 
-        ReviewId anotherId = new ReviewId(345L);
-        assertNotEquals(initialId, anotherId);
-        Review reviewWithExistingUser = testUtils.makeReview(anotherId, validBook.id(), 55 ,validUser.username());
+        Review reviewWithExistingUser = testUtils.makeReview(validBook.id(), 55 , validUserId.username());
 
         try {
             validBook.addReview(reviewWithExistingUser);
             fail("Should throw exception");
         } catch (IllegalReviewException e) {
             assertEquals("Review existing for this book for this user", e.getMessage());
-            assertEquals(initialReview.getId(), e.getReview().getId());
+            assertEquals(initialReview, e.getReview());
         }
-    }
-
-    /*
-     * Note to self:
-     *
-     * Another solution would be to automatically save the reviews when the book is persisted.
-     * But then we'd lose control over the id of Reviews (since they're automatically attributed).
-     * In which case it might be better then to model the `Entity equality` as the pair
-     * {"BookId", "User"}.
-     * If we want to keep `ReviewId` and compare `Reviews` with them, then better keep control on
-     * them.
-     *
-     * To do the automatic saving on hibernate, use: `Cascade ALL`.
-     *
-     */
-    @Test
-    public void addReview_onlyAcceptReviewWithPersistedId() throws Exception {
-       Review review = testUtils.makeReview(ReviewId.NOT_ASSIGNED, validBook.id(), 22, "mark");
-       try {
-           validBook.addReview(review);
-           fail("Should throw exception");
-       } catch (IllegalReviewException e) {
-           assertEquals("Cannot accept a review with un-assigned id, persist it first", e.getMessage());
-           assertEquals(review, e.getReview());
-       }
-
     }
 
     @Test

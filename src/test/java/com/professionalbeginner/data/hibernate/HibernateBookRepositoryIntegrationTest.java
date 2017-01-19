@@ -4,11 +4,9 @@ import com.professionalbeginner.TestUtils;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
 import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
+import com.professionalbeginner.domain.core.book.Review;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +31,6 @@ public class HibernateBookRepositoryIntegrationTest {
 
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private ReviewRepository reviewRepository;
 
     @Autowired
     private TestUtils testUtils;
@@ -95,7 +91,7 @@ public class HibernateBookRepositoryIntegrationTest {
         toSave.setId(savedId);
 
         // Create and persist review
-        List<Review> reviews = createAndPersistRandomReviews(savedId);
+        List<Review> reviews = generateRandomReviews(savedId);
 
         // Add reviews and update version on repo
         reviews.forEach(toSave::addReview);
@@ -122,9 +118,9 @@ public class HibernateBookRepositoryIntegrationTest {
         });
 
         // Add reviews
-        List<Review> reviewsBook1 = createAndPersistRandomReviews(book1.id());
-        List<Review> reviewsBook2 = createAndPersistRandomReviews(book2.id());
-        List<Review> reviewsBook3 = createAndPersistRandomReviews(book3.id());
+        List<Review> reviewsBook1 = generateRandomReviews(book1.id());
+        List<Review> reviewsBook2 = generateRandomReviews(book2.id());
+        List<Review> reviewsBook3 = generateRandomReviews(book3.id());
         reviewsBook1.forEach(book1::addReview);
         reviewsBook2.forEach(book2::addReview);
         reviewsBook3.forEach(book3::addReview);
@@ -160,7 +156,7 @@ public class HibernateBookRepositoryIntegrationTest {
         book.setId(savedId);
 
         // Add review and update on Repo
-        List<Review> reviews = createAndPersistRandomReviews(savedId);
+        List<Review> reviews = generateRandomReviews(savedId);
         reviews.forEach(book::addReview);
         bookRepository.save(book);
 
@@ -172,16 +168,10 @@ public class HibernateBookRepositoryIntegrationTest {
     }
 
 
-    private List<Review> createAndPersistRandomReviews(BookId bookId) {
-        Review review1 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
-        Review review2 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
-        Review review3 = testUtils.makeRandomReview(ReviewId.NOT_ASSIGNED, bookId);
-        ReviewId id1 = reviewRepository.save(review1);
-        ReviewId id2 = reviewRepository.save(review2);
-        ReviewId id3 = reviewRepository.save(review3);
-        review1.setId(id1);
-        review2.setId(id2);
-        review3.setId(id3);
+    private List<Review> generateRandomReviews(BookId bookId) {
+        Review review1 = testUtils.makeRandomReview(bookId);
+        Review review2 = testUtils.makeRandomReview(bookId);
+        Review review3 = testUtils.makeRandomReview(bookId);
 
         return Arrays.asList(review1, review2, review3);
     }

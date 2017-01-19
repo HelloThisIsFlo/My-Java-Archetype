@@ -12,7 +12,7 @@ public class ReviewJpaEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long id; //todo remove ?? (maybe not actually)
 
     @ManyToOne()
     @JoinColumn(name = "book_id")
@@ -52,6 +52,7 @@ public class ReviewJpaEntity {
     }
 
     public void setBookId(Long bookId) {
+        // TODO: Clean up ?
         BookJpaEntity bookJpaEntity = new BookJpaEntity();
         bookJpaEntity.setId(bookId);
         this.book = bookJpaEntity;

@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.user;
 
 import com.professionalbeginner._other.ddd.ValueObject;
 
@@ -10,10 +10,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Kempenich Florian
  */
-public class User implements ValueObject<User> {
+public class UserId implements ValueObject<UserId> {
     private String username;
 
-    public User(String username) {
+    public UserId(String username) {
         checkNotNull(username);
         checkArgument(!username.isEmpty(), "Username shouldn't be empty");
         this.username = username;
@@ -24,7 +24,7 @@ public class User implements ValueObject<User> {
     }
 
     @Override
-    public boolean sameValueAs(User other) {
+    public boolean sameValueAs(UserId other) {
         return other.username().equals(username);
     }
 
@@ -32,8 +32,8 @@ public class User implements ValueObject<User> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return sameValueAs(user);
+        UserId userId = (UserId) o;
+        return sameValueAs(userId);
     }
 
     @Override

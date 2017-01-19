@@ -1,17 +1,14 @@
 package com.professionalbeginner.domain.applicationlayer.impl;
 
 import com.professionalbeginner.TestUtils;
-import com.professionalbeginner.data.inmemory.FakeReviewRepository;
 import com.professionalbeginner.data.inmemory.InMemoryBookRepository;
 import com.professionalbeginner.domain.applicationlayer.BookService;
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.*;
+import com.professionalbeginner.domain.core.book.*;
+import com.professionalbeginner.domain.core.book.IllegalReviewException;
+import com.professionalbeginner.domain.core.book.Rating;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import com.professionalbeginner.domain.interfacelayer.statistics.StatisticsContract;
 import com.professionalbeginner.statisticsmodule.StatisticsContractImpl;
 import org.junit.Before;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kempenich Florian
@@ -29,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 public class BookServiceImplTest {
 
     private BookRepository bookRepository;
-    private ReviewRepository reviewRepository;
     private BookService bookService;
 
     private TestUtils testUtils;
@@ -39,9 +34,8 @@ public class BookServiceImplTest {
         testUtils = new TestUtils();
 
         bookRepository = new InMemoryBookRepository();
-        reviewRepository = new FakeReviewRepository();
         StatisticsContract statistics = new StatisticsContractImpl();
-        bookService = new BookServiceImpl(bookRepository, reviewRepository, statistics);
+        bookService = new BookServiceImpl(bookRepository, statistics);
     }
 
 
@@ -87,7 +81,7 @@ public class BookServiceImplTest {
         Book fakeBook = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
         BookId bookId = bookRepository.save(fakeBook);
         fakeBook.setId(bookId);
-        Review review = testUtils.makeReview(new ReviewId(123L), bookId, rating, reviewer);
+        Review review = testUtils.makeReview(bookId, rating, reviewer);
         fakeBook.addReview(review);
         bookRepository.save(fakeBook);
         return bookId;
@@ -95,20 +89,20 @@ public class BookServiceImplTest {
 
     @Test(expected = IllegalReviewException.class)
     public void addReview_BookNotFound() throws Exception {
-        bookService.addNewReview(new BookId(999L), new Rating(11), new User("patrick"));
+        bookService.addNewReview(new BookId(999L), new Rating(11), new UserId("patrick"));
     }
 
     @Test(expected = IllegalReviewException.class)
     public void addReview_existingReviewForUse() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(12, "frank");
-        bookService.addNewReview(id, new Rating(33), new User("frank"));
+        bookService.addNewReview(id, new Rating(33), new UserId("frank"));
     }
 
     @Test
     public void addReview() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(34, "frank");
 
-        bookService.addNewReview(id, new Rating(99), new User("Mark"));
+        bookService.addNewReview(id, new Rating(99), new UserId("Mark"));
 
         Book fromService = bookService.getDetails(id);
         assertEquals(2, fromService.getReviews().size());
@@ -122,7 +116,7 @@ public class BookServiceImplTest {
     @Test
     public void getAverageRating() throws Exception {
         BookId id = addFakeBookWithReviewToRepo_andGetId(80, "frank");
-        bookService.addNewReview(id, new Rating(90), new User("mark"));
+        bookService.addNewReview(id, new Rating(90), new UserId("mark"));
 
         assertEquals(85, bookService.getAverageRating(id), 0);
     }

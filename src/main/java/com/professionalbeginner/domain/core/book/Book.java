@@ -1,11 +1,8 @@
 package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
-import com.professionalbeginner.domain.core.review.ReviewId;
 import com.professionalbeginner._other.ddd.Entity;
-import com.professionalbeginner.domain.core.review.IllegalReviewException;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.user.UserId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Kempenich Florian
+ *
+ * Aggregate Root of the Book Aggregate
  */
 public class Book implements Entity<Book> {
 
@@ -97,15 +96,8 @@ public class Book implements Entity<Book> {
     }
 
     private void checkIfValid(Review review) {
-        checkIfReviewHasPersistedId(review);
         checkIfCorrectBookId(review);
         checkIfNoExistingReview(review);
-    }
-
-    private void checkIfReviewHasPersistedId(Review review) {
-        if (review.getId().sameValueAs(ReviewId.NOT_ASSIGNED)) {
-            throw new IllegalReviewException("Cannot accept a review with un-assigned id, persist it first", review);
-        }
     }
 
     private void checkIfCorrectBookId(Review review) {
@@ -115,9 +107,9 @@ public class Book implements Entity<Book> {
     }
 
     private void checkIfNoExistingReview(Review review) {
-        User user = review.getReviewer();
+        UserId userId = review.getReviewer();
         reviews.stream()
-                .filter(r -> r.getReviewer().sameValueAs(user))
+                .filter(r -> r.getReviewer().sameValueAs(userId))
                 .findAny()
                 .ifPresent(existingReview -> {
                     throw new IllegalReviewException("Review existing for this book for this user", existingReview);

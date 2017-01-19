@@ -1,40 +1,32 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.base.MoreObjects;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner._other.ddd.Entity;
+import com.professionalbeginner._other.ddd.ValueObject;
+import com.professionalbeginner.domain.core.user.UserId;
 
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Represents a book review.
- *
- * @author Kempenich Florian
+ * @author Florian Kempenich
  */
-public class Review implements Entity<Review> {
+public class Review implements ValueObject<Review> {
 
     public static final Review NULL = new Review(
-            ReviewId.NOT_ASSIGNED,
             BookId.NOT_ASSIGNED,
-            new User("-1"), new Rating(0)
+            new UserId("-1"),
+            new Rating(0)
     );
 
-    private ReviewId id;
     private BookId bookId;
     private Rating rating;
-    private User reviewer;
+    private UserId reviewer;
 
-    public Review(ReviewId id, BookId bookId, User reviewer, Rating rating) {
-        this.id = checkNotNull(id);
+    public Review(BookId bookId, UserId reviewer, Rating rating) {
         this.bookId = checkNotNull(bookId);
         updateRating(rating);
         this.reviewer = checkNotNull(reviewer);
-    }
-
-    public ReviewId getId() {
-        return id;
     }
 
     public BookId getBookId() {
@@ -49,13 +41,13 @@ public class Review implements Entity<Review> {
         this.rating = checkNotNull(rating);
     }
 
-    public User getReviewer() {
+    public UserId getReviewer() {
         return reviewer;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(bookId, rating, reviewer);
     }
 
     @Override
@@ -63,13 +55,12 @@ public class Review implements Entity<Review> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return sameIdentityAs(review);
+        return sameValueAs(review);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("id", id.toString())
                 .add("bookId", bookId.toString())
                 .add("rating", rating.value())
                 .add("reviewer", reviewer.username())
@@ -77,11 +68,10 @@ public class Review implements Entity<Review> {
     }
 
     @Override
-    public boolean sameIdentityAs(Review other) {
-        return other.id.sameValueAs(id);
+    public boolean sameValueAs(Review other) {
+        return Objects.equals(bookId, other.bookId) &&
+                Objects.equals(rating, other.rating) &&
+                Objects.equals(reviewer, other.reviewer);
     }
 
-    public void setId(ReviewId id) {
-        this.id = checkNotNull(id);
-    }
 }

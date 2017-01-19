@@ -1,4 +1,4 @@
-package com.professionalbeginner.domain.core.review;
+package com.professionalbeginner.domain.core.book;
 
 import com.google.common.testing.EqualsTester;
 import org.junit.Test;

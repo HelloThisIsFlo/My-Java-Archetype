@@ -2,14 +2,9 @@ package com.professionalbeginner.data.hibernate;
 
 import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
 import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.Rating;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.book.*;
+import com.professionalbeginner.domain.core.book.Rating;
+import com.professionalbeginner.domain.core.user.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -68,10 +63,6 @@ public class JpaMapper {
         return new BookId(jpaBook.getId());
     }
 
-    public ReviewId mapId(ReviewJpaEntity reviewJpa) {
-        return new ReviewId(reviewJpa.getId());
-    }
-
     private void addAllReviews(Book book, List<ReviewJpaEntity> reviewJpaEntities) {
         reviewJpaEntities.stream()
                 .map(this::map)
@@ -88,12 +79,11 @@ public class JpaMapper {
     }
 
     public Review map(ReviewJpaEntity reviewJpaEntity) {
-        ReviewId id = new ReviewId(reviewJpaEntity.getId());
         BookId bookId = new BookId(reviewJpaEntity.getBookId());
-        User reviewer = new User(reviewJpaEntity.getReviewer());
+        UserId reviewer = new UserId(reviewJpaEntity.getReviewer());
         Rating rating = new Rating(reviewJpaEntity.getRating());
 
-        return new Review(id, bookId, reviewer, rating);
+        return new Review(bookId, reviewer, rating);
     }
 
     public List<ReviewJpaEntity> mapAllToORM(List<Review> reviews) {
