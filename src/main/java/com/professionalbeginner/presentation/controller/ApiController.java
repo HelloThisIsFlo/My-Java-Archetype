@@ -7,6 +7,7 @@ import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundExc
 import com.professionalbeginner.presentation.Assembler;
 import com.professionalbeginner.presentation.model.BookDTO;
 import com.professionalbeginner.presentation.model.BookDetailsDTO;
+import com.professionalbeginner.presentation.model.ReviewDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +78,16 @@ public class ApiController {
         return bookDTO;
     }
 
-    public void addNewReview() {
-        // TODO: 1/17/2017
+    @RequestMapping(value = "/books/newReview", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public ReviewDTO addNewReview(@RequestBody @Valid ReviewDTO reviewDTO) {
+        BookId bookId = new BookId(reviewDTO.getBookId());
+        Rating rating = new Rating(reviewDTO.getRating());
+        UserId reviewer = new UserId(reviewDTO.getUsername());
+
+        bookService.addNewReview(bookId, rating, reviewer);
+
+        return reviewDTO;
     }
 
 

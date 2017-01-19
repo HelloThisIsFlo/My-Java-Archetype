@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalReviewException.class)
     @ResponseBody
     public ErrorInfo handleExistingReview(HttpServletRequest request, IllegalReviewException ex) {
-        LOG.error("Tried to get book, but id not found! --> review={}", ex.getReview());
+        LOG.error("Illegal Review --> review={}, message={}", ex.getMessage(), ex.getMessage());
         return new ErrorInfo(request.getRequestURL().toString(), ex);
     }
 
