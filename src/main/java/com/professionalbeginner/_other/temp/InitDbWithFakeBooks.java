@@ -1,15 +1,8 @@
 package com.professionalbeginner._other.temp;
 
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.Rating;
-import com.professionalbeginner.domain.core.review.Review;
-import com.professionalbeginner.domain.core.review.ReviewId;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.book.*;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookRepository;
-import com.professionalbeginner.domain.interfacelayer.repository.ReviewRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +20,10 @@ public class InitDbWithFakeBooks implements CommandLineRunner{
 
     private static final Logger LOG = LoggerFactory.getLogger(InitDbWithFakeBooks.class);
     private final BookRepository bookRepository;
-    private final ReviewRepository reviewRepository;
 
     @Autowired
-    public InitDbWithFakeBooks(BookRepository bookRepository, ReviewRepository reviewRepository) {
+    public InitDbWithFakeBooks(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -57,13 +48,9 @@ public class InitDbWithFakeBooks implements CommandLineRunner{
         Review review3 = makeReview(id3, 87, "Mark");
         List<Review> reviewsBook3 = Arrays.asList(review1, review2, review3);
 
-        reviewsBook3.stream()
-                .map(review -> {
-                    ReviewId id = reviewRepository.save(review);
-                    review.setId(id);
-                    return review;
-                })
-                .forEach(book3::addReview);
+        reviewsBook3.forEach(book3::addReview);
+
+        bookRepository.save(book3);
 
 
     }
@@ -78,6 +65,6 @@ public class InitDbWithFakeBooks implements CommandLineRunner{
     }
 
     private Review makeReview(BookId bookId, int rating, String reviewerName) {
-        return new Review(ReviewId.NOT_ASSIGNED, bookId, new User(reviewerName), new Rating(rating));
+        return new Review(bookId, new UserId(reviewerName), new Rating(rating));
     }
 }

@@ -1,5 +1,6 @@
 package com.professionalbeginner.presentation.exception;
 
+import com.professionalbeginner.domain.core.book.IllegalReviewException;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,14 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorInfo handleExistingReview(HttpServletRequest request, BookNotFoundException ex) {
         LOG.error("Tried to get book, but id not found! --> id={}", ex.getSearchedId());
+        return new ErrorInfo(request.getRequestURL().toString(), ex);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IllegalReviewException.class)
+    @ResponseBody
+    public ErrorInfo handleExistingReview(HttpServletRequest request, IllegalReviewException ex) {
+        LOG.error("Tried to get book, but id not found! --> review={}", ex.getReview());
         return new ErrorInfo(request.getRequestURL().toString(), ex);
     }
 

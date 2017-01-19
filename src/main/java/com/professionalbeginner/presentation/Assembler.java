@@ -1,7 +1,7 @@
 package com.professionalbeginner.presentation;
 
 import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.review.Review;
+import com.professionalbeginner.domain.core.book.Review;
 import com.professionalbeginner.presentation.model.BookDTO;
 import com.professionalbeginner.presentation.model.BookDetailsDTO;
 import com.professionalbeginner.presentation.model.ReviewDTO;

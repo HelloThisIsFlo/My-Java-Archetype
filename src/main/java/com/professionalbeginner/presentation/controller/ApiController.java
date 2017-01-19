@@ -1,12 +1,8 @@
 package com.professionalbeginner.presentation.controller;
 
 import com.professionalbeginner.domain.applicationlayer.BookService;
-import com.professionalbeginner.domain.core.book.Book;
-import com.professionalbeginner.domain.core.book.BookId;
-import com.professionalbeginner.domain.core.book.Characteristics;
-import com.professionalbeginner.domain.core.book.Price;
-import com.professionalbeginner.domain.core.review.Rating;
-import com.professionalbeginner.domain.core.review.User;
+import com.professionalbeginner.domain.core.book.*;
+import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.BookNotFoundException;
 import com.professionalbeginner.presentation.Assembler;
 import com.professionalbeginner.presentation.model.BookDTO;
@@ -61,7 +57,7 @@ public class ApiController {
         // TODO: 1/17/2017 remove 
         BookId id = new BookId(bookId);
         Rating rating = new Rating(12);
-        User reviewer = new User("patrick");
+        UserId reviewer = new UserId("patrick");
         bookService.addNewReview(id, rating, reviewer);
     }
 
