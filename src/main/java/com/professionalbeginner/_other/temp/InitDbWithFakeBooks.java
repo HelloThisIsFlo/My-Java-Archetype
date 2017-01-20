@@ -30,7 +30,7 @@ public class InitDbWithFakeBooks implements CommandLineRunner{
     public void run(String... args) throws Exception {
 
         for (int i = 0; i < 100; i++) {
-            LOG.info("Yep it's running");
+            LOG.info("Init Database with fake books       (displayed 100 times for visibility)");
         }
 
         Book book1 = makeBook("This title", "Author", 334, 123.3);

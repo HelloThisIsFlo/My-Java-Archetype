@@ -26,14 +26,19 @@ public class ApiController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiController.class);
 
+    private final BookService bookService;
+    private final Assembler bookAssembler;
+
     @Autowired
-    BookService bookService;
-    @Autowired
-    Assembler bookAssembler;
+    public ApiController(BookService bookService, Assembler bookAssembler) {
+        this.bookService = bookService;
+        this.bookAssembler = bookAssembler;
+    }
+
 
     @RequestMapping("/books")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookDTO> getAllBooks() {
+    public List<BookDTO> retrieveAllBooks() {
         List<Book> allBooks = bookService.getAllBooks();
 
         return allBooks.stream()
@@ -43,23 +48,13 @@ public class ApiController {
 
     @RequestMapping("/books/detail")
     @ResponseStatus(HttpStatus.OK)
-    public BookDetailsDTO getBookDetails(@RequestParam("bookId") Long id) throws BookNotFoundException {
+    public BookDetailsDTO retrieveBookDetails(@RequestParam("bookId") Long id) throws BookNotFoundException {
         BookId bookId = new BookId(id);
 
         Book book = bookService.getDetails(bookId);
         double avgRating = bookService.getAverageRating(bookId);
 
         return bookAssembler.toBookDetailsDTO(book, avgRating);
-    }
-
-    @RequestMapping("/test")
-    @ResponseStatus(HttpStatus.OK)
-    public void test(@RequestParam("bookId") Long bookId) {
-        // TODO: 1/17/2017 remove 
-        BookId id = new BookId(bookId);
-        Rating rating = new Rating(12);
-        UserId reviewer = new UserId("patrick");
-        bookService.addNewReview(id, rating, reviewer);
     }
 
     @RequestMapping(value = "/books/new", method = RequestMethod.POST)
