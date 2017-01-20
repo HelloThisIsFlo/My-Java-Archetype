@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.Assert.fail;
@@ -20,7 +21,7 @@ public class UserTest {
     @Before
     public void setUp() throws Exception {
         validId = new UserId("patrick887");
-        validInfo = new UserInfo("Patrick", "Dupont", Date.from(Instant.EPOCH));
+        validInfo = new UserInfo("Patrick", "Dupont", LocalDate.of(2000, 1, 1));
     }
 
     @Test
@@ -46,7 +47,7 @@ public class UserTest {
     @Test
     public void testEquality() throws Exception {
         UserId otherId = new UserId("Franky3939");
-        UserInfo otherInfo = new UserInfo("Frank", "Herbert", Date.from(Instant.EPOCH));
+        UserInfo otherInfo = new UserInfo("Frank", "Herbert", LocalDate.of(2003, 3, 3));
         new EqualsTester()
                 .addEqualityGroup(new User(validId, validInfo), new User(validId, validInfo))
                 .addEqualityGroup(new User(otherId, otherInfo), new User(otherId, validInfo)) // Equality on id only

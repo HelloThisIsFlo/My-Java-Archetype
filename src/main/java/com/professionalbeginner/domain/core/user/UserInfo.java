@@ -2,6 +2,7 @@ package com.professionalbeginner.domain.core.user;
 
 import com.professionalbeginner._other.ddd.ValueObject;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -14,9 +15,9 @@ public class UserInfo implements ValueObject<UserInfo> {
 
     public final String firstName;
     public final String lastName;
-    public final Date birthDate;
+    public final LocalDate birthDate;
 
-    public UserInfo(String firstName, String lastName, Date birthDate) {
+    public UserInfo(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = checkNotNull(firstName);
         this.lastName = checkNotNull(lastName);
         this.birthDate = checkNotNull(birthDate);

@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.Assert.fail;
@@ -14,7 +15,7 @@ import static org.junit.Assert.fail;
  */
 public class UserInfoTest {
 
-    private Date validDate;
+    private LocalDate validDate;
     private String validFirstName;
     private String validLastName;
 
@@ -23,7 +24,7 @@ public class UserInfoTest {
     // On User: tests if user > 18 yo
     @Before
     public void setUp() throws Exception {
-        validDate = Date.from(Instant.now()); //todo: Update for something less random
+        validDate = LocalDate.of(2000, 1, 1);
         validFirstName = "Patrick";
         validLastName = "Smith";
     }
@@ -37,11 +38,11 @@ public class UserInfoTest {
         assertInvalid(validFirstName, validLastName, null);
     }
 
-    private void assertValid(String firstName, String lastName, Date birthdate) {
+    private void assertValid(String firstName, String lastName, LocalDate birthdate) {
         new UserInfo(firstName, lastName, birthdate);
     }
 
-    private void assertInvalid(String firstName, String lastName, Date birthdate) {
+    private void assertInvalid(String firstName, String lastName, LocalDate birthdate) {
         try {
             new UserInfo(firstName, lastName, birthdate);
             fail("Should throw exception");
@@ -54,7 +55,7 @@ public class UserInfoTest {
     public void testEquality() throws Exception {
         String anotherFirstName = "Another first name";
         String anotherLastName = "Another last name";
-        Date anotherDate = Date.from(Instant.EPOCH);
+        LocalDate anotherDate = LocalDate.of(2002, 2, 2);
         new EqualsTester()
                 .addEqualityGroup(new UserInfo(validFirstName, validLastName, validDate), new UserInfo(validFirstName, validLastName, validDate))
                 .addEqualityGroup(new UserInfo(anotherFirstName, validLastName, validDate), new UserInfo(anotherFirstName, validLastName, validDate))
