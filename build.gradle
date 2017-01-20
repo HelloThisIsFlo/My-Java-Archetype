@@ -32,6 +32,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("org.postgresql:postgresql")
     compile('com.google.guava:guava:20.0')
+    compile fileTree(dir: 'libs', include: '*.jar')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.google.guava:guava-testlib:20.0')
