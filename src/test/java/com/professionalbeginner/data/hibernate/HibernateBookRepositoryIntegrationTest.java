@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -25,6 +26,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integration-tests")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class HibernateBookRepositoryIntegrationTest {
 
     // TODO: 12/10/2016 Also implement integration tests on service, or even controller
@@ -167,6 +169,31 @@ public class HibernateBookRepositoryIntegrationTest {
         assertTrue("Review list should be empty", fromRepo.getReviews().isEmpty());
     }
 
+    @Test
+    public void addReviewToBookWithExistingReviews_reviewsAreNotDuplicated() throws Exception {
+        // WITH:  Save book & add initial review
+        Book book = testUtils.makeRandomBook(BookId.NOT_ASSIGNED);
+        BookId savedId  = bookRepository.save(book);
+        book.setId(savedId);
+
+        Review initialReview = testUtils.makeRandomReview(savedId);
+        book.addReview(initialReview);
+        bookRepository.save(book);
+
+
+        // WHEN: Add another review & update in Repo
+        Review anotherReview = testUtils.makeRandomReview(savedId);
+        book.addReview(anotherReview);
+        bookRepository.save(book);
+
+
+        // THEN: Check no error fetching from repo & book contains the 2 reviews
+        Book fromRepo = bookRepository.findById(savedId, true);
+        List<Review> reviewsFromRepo = fromRepo.getReviews();
+
+        assertTrue("Should contain review", reviewsFromRepo.contains(initialReview));
+        assertTrue("Should contain review", reviewsFromRepo.contains(anotherReview));
+    }
 
     private List<Review> generateRandomReviews(BookId bookId) {
         Review review1 = testUtils.makeRandomReview(bookId);

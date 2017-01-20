@@ -26,8 +26,10 @@ public class JpaMapper {
                 book.characteristics().author(),
                 book.characteristics().numPages(),
                 book.price().amount(),
-                mapAllToORM(book.getReviews())
+                null
         );
+        List<ReviewJpaEntity> reviews = mapAllToORM(book.getReviews(), jpaBook);
+        jpaBook.setReviews(reviews);
 
         if (!book.id().sameValueAs(BookId.NOT_ASSIGNED)) {
             jpaBook.setId(book.id().idLong());
@@ -69,9 +71,9 @@ public class JpaMapper {
                 .forEach(book::addReview);
     }
 
-    public ReviewJpaEntity map(Review review) {
+    public ReviewJpaEntity map(Review review, BookJpaEntity book) {
         ReviewJpaEntity jpaEntity = new ReviewJpaEntity(
-                review.getBookId().idLong(),
+                book,
                 review.getRating().value(),
                 review.getReviewer().username()
         );
@@ -79,16 +81,16 @@ public class JpaMapper {
     }
 
     public Review map(ReviewJpaEntity reviewJpaEntity) {
-        BookId bookId = new BookId(reviewJpaEntity.getBookId());
+        BookId bookId = new BookId(reviewJpaEntity.getBook().getId());
         UserId reviewer = new UserId(reviewJpaEntity.getReviewer());
         Rating rating = new Rating(reviewJpaEntity.getRating());
 
         return new Review(bookId, reviewer, rating);
     }
 
-    public List<ReviewJpaEntity> mapAllToORM(List<Review> reviews) {
+    private List<ReviewJpaEntity> mapAllToORM(List<Review> reviews, BookJpaEntity bookJpaEntity) {
         return reviews.stream()
-                .map(this::map)
+                .map(review -> map(review, bookJpaEntity))
                 .collect(Collectors.toList());
     }
 
