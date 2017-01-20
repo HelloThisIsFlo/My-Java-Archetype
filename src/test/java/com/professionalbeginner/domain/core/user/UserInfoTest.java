@@ -12,7 +12,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Kempenich Florian
  */
-public class UserInfosTest {
+public class UserInfoTest {
 
     private Date validDate;
     private String validFirstName;
@@ -38,12 +38,12 @@ public class UserInfosTest {
     }
 
     private void assertValid(String firstName, String lastName, Date birthdate) {
-        new UserInfos(firstName, lastName, birthdate);
+        new UserInfo(firstName, lastName, birthdate);
     }
 
     private void assertInvalid(String firstName, String lastName, Date birthdate) {
         try {
-            new UserInfos(firstName, lastName, birthdate);
+            new UserInfo(firstName, lastName, birthdate);
             fail("Should throw exception");
         } catch (NullPointerException e) {
             // expected
@@ -56,9 +56,9 @@ public class UserInfosTest {
         String anotherLastName = "Another last name";
         Date anotherDate = Date.from(Instant.EPOCH);
         new EqualsTester()
-                .addEqualityGroup(new UserInfos(validFirstName, validLastName, validDate), new UserInfos(validFirstName, validLastName, validDate))
-                .addEqualityGroup(new UserInfos(anotherFirstName, validLastName, validDate), new UserInfos(anotherFirstName, validLastName, validDate))
-                .addEqualityGroup(new UserInfos(anotherFirstName, anotherLastName, anotherDate), new UserInfos(anotherFirstName, anotherLastName, anotherDate))
+                .addEqualityGroup(new UserInfo(validFirstName, validLastName, validDate), new UserInfo(validFirstName, validLastName, validDate))
+                .addEqualityGroup(new UserInfo(anotherFirstName, validLastName, validDate), new UserInfo(anotherFirstName, validLastName, validDate))
+                .addEqualityGroup(new UserInfo(anotherFirstName, anotherLastName, anotherDate), new UserInfo(anotherFirstName, anotherLastName, anotherDate))
                 .testEquals();
     }
 

@@ -10,20 +10,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Kempenich Florian
  */
-public class UserInfos implements ValueObject<UserInfos> {
+public class UserInfo implements ValueObject<UserInfo> {
 
     public final String firstName;
     public final String lastName;
     public final Date birthDate;
 
-    public UserInfos(String firstName, String lastName, Date birthDate) {
+    public UserInfo(String firstName, String lastName, Date birthDate) {
         this.firstName = checkNotNull(firstName);
         this.lastName = checkNotNull(lastName);
         this.birthDate = checkNotNull(birthDate);
     }
 
     @Override
-    public boolean sameValueAs(UserInfos other) {
+    public boolean sameValueAs(UserInfo other) {
         return Objects.equals(firstName, other.firstName) &&
                 Objects.equals(lastName, other.lastName) &&
                 Objects.equals(birthDate, other.birthDate);
@@ -33,8 +33,8 @@ public class UserInfos implements ValueObject<UserInfos> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserInfos userInfos = (UserInfos) o;
-        return sameValueAs(userInfos);
+        UserInfo userInfo = (UserInfo) o;
+        return sameValueAs(userInfo);
     }
 
     @Override

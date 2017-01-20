@@ -12,9 +12,27 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class User implements Entity<User> {
 
     private UserId userId;
+    private UserInfo info;
 
-    public User(UserId userId) {
+    public User(UserId userId, UserInfo userInfo) {
+        setUserId(userId);
+        setInfo(userInfo);
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserId userId) {
         this.userId = checkNotNull(userId);
+    }
+
+    public UserInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(UserInfo info) {
+        this.info = checkNotNull(info);
     }
 
     @Override
