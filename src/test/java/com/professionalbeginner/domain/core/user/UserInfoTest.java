@@ -34,11 +34,16 @@ public class UserInfoTest {
 
     @Test
     public void testNewInstance() throws Exception {
+        LocalDate tooFarInPast = LocalDate.now().minusYears(150);
+        LocalDate inFuture = LocalDate.now().plusDays(1);
+
         assertValid(validFirstName, validLastName, validDate);
 
         assertInvalid(null, validLastName, validDate);
         assertInvalid(validFirstName, null, validDate);
         assertInvalid(validFirstName, validLastName, null);
+        assertInvalid(validFirstName, validLastName, tooFarInPast);
+        assertInvalid(validFirstName, validLastName, inFuture);
     }
 
     private void assertValid(String firstName, String lastName, LocalDate birthdate) {
@@ -49,7 +54,7 @@ public class UserInfoTest {
         try {
             new UserInfo(firstName, lastName, birthdate);
             fail("Should throw exception");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IllegalArgumentException e) {
             // expected
         }
     }

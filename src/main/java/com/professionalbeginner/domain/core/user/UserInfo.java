@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -18,9 +19,20 @@ public class UserInfo implements ValueObject<UserInfo> {
     public final LocalDate birthDate;
 
     public UserInfo(String firstName, String lastName, LocalDate birthDate) {
+        checkArgument(tooFarPast(birthDate), "Date too far in the past");
+        checkArgument(inFuture(birthDate), "Date in future");
         this.firstName = checkNotNull(firstName);
         this.lastName = checkNotNull(lastName);
         this.birthDate = checkNotNull(birthDate);
+    }
+
+    private boolean tooFarPast(LocalDate birthDate) {
+        LocalDate limitPast = LocalDate.now().minusYears(150);
+        return birthDate.compareTo(limitPast) > 0;
+    }
+
+    private boolean inFuture(LocalDate birthDate) {
+        return birthDate.compareTo(LocalDate.now()) < 0;
     }
 
     @Override
