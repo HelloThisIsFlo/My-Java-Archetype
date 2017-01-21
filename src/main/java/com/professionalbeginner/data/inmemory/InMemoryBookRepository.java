@@ -42,7 +42,7 @@ public class InMemoryBookRepository implements BookRepository {
         int index = getIndex(id);
 
         books.remove(index);
-        books.add(book);
+        books.add(index, book);
 
         return id;
     }

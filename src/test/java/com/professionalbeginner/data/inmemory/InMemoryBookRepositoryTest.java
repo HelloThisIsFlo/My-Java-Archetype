@@ -125,6 +125,23 @@ public class InMemoryBookRepositoryTest {
         assertNotEquals(savedBook.id(), BookId.NOT_ASSIGNED);
     }
 
+    @Test
+    public void bug_afterUpdatingExistingBook_correctBookIsReturned() throws Exception {
+        // Given: Multiple books in Repo
+        BookId idFirst = bookRepository.save(testUtils.makeRandomBook(BookId.NOT_ASSIGNED));
+        bookRepository.save(testUtils.makeRandomBook(BookId.NOT_ASSIGNED));
+        bookRepository.save(testUtils.makeRandomBook(BookId.NOT_ASSIGNED));
+        bookRepository.save(testUtils.makeRandomBook(BookId.NOT_ASSIGNED));
+
+        // When: update one of saved book
+        Book updated = testUtils.makeRandomBook(idFirst);
+        bookRepository.save(updated);
+
+        // Then: Correct book is returned
+        Book fromRepo = bookRepository.findById(idFirst, false);
+        assertEquals(idFirst, fromRepo.id());
+    }
+
     private void assertReviewListEmtpy(Book book) {
         assertTrue("Review list should be empty", book.getReviews().isEmpty());
     }
