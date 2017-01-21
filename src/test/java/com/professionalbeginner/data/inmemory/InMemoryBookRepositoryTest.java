@@ -55,7 +55,7 @@ public class InMemoryBookRepositoryTest {
                 "Books are not similar",
                 areBooksSimilar_ignoreReviews(book, fromRepoWithoutReviews)
         );
-        assertTrue("Review list shoudl be empty", fromRepoWithoutReviews.getReviews().isEmpty());
+        assertTrue("Review list should be empty", fromRepoWithoutReviews.getReviews().isEmpty());
     }
 
     @Test

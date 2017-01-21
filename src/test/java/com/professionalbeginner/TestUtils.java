@@ -2,10 +2,13 @@ package com.professionalbeginner;
 
 import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.book.Rating;
+import com.professionalbeginner.domain.core.user.User;
 import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner._other.spring.IntegrationTests;
+import com.professionalbeginner.domain.core.user.UserInfo;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 /**
@@ -47,6 +50,15 @@ public class TestUtils {
 
     public Review makeRandomReview(BookId bookId) {
         return makeReview(bookId, randomRating(), randomString());
+    }
+
+    public User makeRandomUser(UserId userId) {
+        UserInfo info = new UserInfo(randomString(), randomString(), defaultDate());
+        return new User(userId, info);
+    }
+
+    public LocalDate defaultDate() {
+        return LocalDate.of(2000, 1, 1);
     }
 
     private int randomRating() {
