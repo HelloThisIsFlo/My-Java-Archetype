@@ -2,6 +2,9 @@ package com.professionalbeginner.domain.core.user;
 
 import com.professionalbeginner._other.ddd.Entity;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -10,6 +13,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Kempenich Florian
  */
 public class User implements Entity<User> {
+
+    public static final User NULL = new User(UserId.NULL, UserInfo.NULL);
+    private static final int LEGAL_AGE = 18;
 
     private UserId userId;
     private UserInfo info;
@@ -32,7 +38,20 @@ public class User implements Entity<User> {
     }
 
     public void setInfo(UserInfo info) {
+        checkIfInLegalAge(info);
         this.info = checkNotNull(info);
+    }
+
+    private void checkIfInLegalAge(UserInfo info) {
+        if (notInLegalAge(info.birthDate)) {
+            throw new IllegalUserException("User not in legal age: " + info, info);
+        }
+    }
+
+    private boolean notInLegalAge(LocalDate birthDate) {
+        LocalDate now = LocalDate.now();
+        long userAge = birthDate.until(now, ChronoUnit.YEARS);
+        return userAge < LEGAL_AGE;
     }
 
     @Override

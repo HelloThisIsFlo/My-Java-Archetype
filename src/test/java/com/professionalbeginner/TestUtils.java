@@ -58,7 +58,7 @@ public class TestUtils {
     }
 
     public LocalDate defaultDate() {
-        return LocalDate.of(2000, 1, 1);
+        return LocalDate.of(1992, 10, 16);
     }
 
     private int randomRating() {

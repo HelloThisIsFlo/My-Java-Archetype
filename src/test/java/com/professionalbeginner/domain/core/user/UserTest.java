@@ -1,13 +1,16 @@
 package com.professionalbeginner.domain.core.user;
 
 import com.google.common.testing.EqualsTester;
+import com.professionalbeginner.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.validation.constraints.Null;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -17,11 +20,13 @@ public class UserTest {
 
     private UserId validId;
     private UserInfo validInfo;
+    private TestUtils testUtils;
 
     @Before
     public void setUp() throws Exception {
+        testUtils = new TestUtils();
         validId = new UserId("patrick887");
-        validInfo = new UserInfo("Patrick", "Dupont", LocalDate.of(2000, 1, 1));
+        validInfo = new UserInfo("Patrick", "Dupont", testUtils.defaultDate());
     }
 
     @Test
@@ -47,10 +52,34 @@ public class UserTest {
     @Test
     public void testEquality() throws Exception {
         UserId otherId = new UserId("Franky3939");
-        UserInfo otherInfo = new UserInfo("Frank", "Herbert", LocalDate.of(2003, 3, 3));
+        UserInfo otherInfo = new UserInfo("Frank", "Herbert", testUtils.defaultDate().plusMonths(4));
         new EqualsTester()
                 .addEqualityGroup(new User(validId, validInfo), new User(validId, validInfo))
                 .addEqualityGroup(new User(otherId, otherInfo), new User(otherId, validInfo)) // Equality on id only
                 .testEquals();
+    }
+
+    @Test
+    public void userNotInLegalAge_throwException() throws Exception {
+        // Given
+        int illegalAge = 17;
+        int legalAge = 18;
+
+        LocalDate illegalBirthDate = LocalDate.now().minusYears(illegalAge);
+        LocalDate legalBirthDate = LocalDate.now().minusYears(legalAge);
+
+        // When
+        UserInfo illegalInfo = new UserInfo("asdfdd", "sdasdf", illegalBirthDate);
+        try {
+            new User(UserId.NULL, illegalInfo);
+            fail("Should throw exception");
+        }
+
+        // Then
+        catch (IllegalUserException e) {
+            assertEquals("User not in legal age: " + illegalInfo, e.getMessage());
+            assertEquals(illegalInfo, e.getUserInfo());
+        }
+        new User(UserId.NULL, new UserInfo("asdf", "asdf", legalBirthDate)); // no exception
     }
 }

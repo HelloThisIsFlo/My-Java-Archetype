@@ -1,5 +1,6 @@
 package com.professionalbeginner.domain.core.user;
 
+import com.google.common.base.MoreObjects;
 import com.professionalbeginner._other.ddd.ValueObject;
 
 import java.time.LocalDate;
@@ -14,9 +15,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class UserInfo implements ValueObject<UserInfo> {
 
+    public final static UserInfo NULL = new UserInfo();
+
     public final String firstName;
     public final String lastName;
     public final LocalDate birthDate;
+
+    private UserInfo() {
+        this.firstName = "";
+        this.lastName = "";
+        this.birthDate = LocalDate.MIN;
+    }
 
     public UserInfo(String firstName, String lastName, LocalDate birthDate) {
         checkArgument(tooFarPast(birthDate), "Date too far in the past");
@@ -53,5 +62,14 @@ public class UserInfo implements ValueObject<UserInfo> {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, birthDate);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("firstName", firstName)
+                .add("lastName", lastName)
+                .add("birthDate", birthDate)
+                .toString();
     }
 }
