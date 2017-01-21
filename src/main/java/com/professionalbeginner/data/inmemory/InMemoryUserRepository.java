@@ -18,7 +18,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Kempenich Florian
  */
-@Prod
 @Dev
 @Repository
 public class InMemoryUserRepository implements UserRepository {

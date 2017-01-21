@@ -1,5 +1,7 @@
 package com.professionalbeginner._other.temp;
 
+import com.professionalbeginner._other.spring.Dev;
+import com.professionalbeginner._other.spring.Prod;
 import com.professionalbeginner.domain.core.book.*;
 import com.professionalbeginner.domain.core.user.User;
 import com.professionalbeginner.domain.core.user.UserId;
@@ -19,6 +21,8 @@ import java.util.List;
 /**
  * @author Kempenich Florian
  */
+@Prod
+@Dev
 @Component
 public class InitDbWithFakeBooks implements CommandLineRunner{
 
