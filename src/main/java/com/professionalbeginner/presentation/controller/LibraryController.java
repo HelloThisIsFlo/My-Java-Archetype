@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
  * @author Kempenich Florian
  */
 @RestController
-public class ApiController {
+public class LibraryController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ApiController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LibraryController.class);
 
     private final BookService bookService;
     private final Assembler bookAssembler;
 
     @Autowired
-    public ApiController(BookService bookService, Assembler bookAssembler) {
+    public LibraryController(BookService bookService, Assembler bookAssembler) {
         this.bookService = bookService;
         this.bookAssembler = bookAssembler;
     }

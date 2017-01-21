@@ -34,6 +34,11 @@ dependencies {
     compile('com.google.guava:guava:20.0')
     compile fileTree(dir: 'libs', include: '*.jar')
 
+    // Jackson custom parsing modules
+    compile('com.fasterxml.jackson.module:jackson-module-parameter-names')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.google.guava:guava-testlib:20.0')
 }

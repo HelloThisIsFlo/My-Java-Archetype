@@ -7,12 +7,14 @@ import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.core.user.UserInfo;
 import com.professionalbeginner.domain.interfacelayer.repository.UserNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Kempenich Florian
  */
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

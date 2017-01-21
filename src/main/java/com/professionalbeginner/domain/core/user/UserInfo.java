@@ -4,7 +4,6 @@ import com.google.common.base.MoreObjects;
 import com.professionalbeginner._other.ddd.ValueObject;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -19,20 +18,20 @@ public class UserInfo implements ValueObject<UserInfo> {
 
     public final String firstName;
     public final String lastName;
-    public final LocalDate birthDate;
+    public final LocalDate birthdate;
 
     private UserInfo() {
         this.firstName = "";
         this.lastName = "";
-        this.birthDate = LocalDate.MIN;
+        this.birthdate = LocalDate.MIN;
     }
 
-    public UserInfo(String firstName, String lastName, LocalDate birthDate) {
-        checkArgument(tooFarPast(birthDate), "Date too far in the past");
-        checkArgument(inFuture(birthDate), "Date in future");
+    public UserInfo(String firstName, String lastName, LocalDate birthdate) {
+        checkArgument(tooFarPast(birthdate), "Date too far in the past");
+        checkArgument(inFuture(birthdate), "Date in future");
         this.firstName = checkNotNull(firstName);
         this.lastName = checkNotNull(lastName);
-        this.birthDate = checkNotNull(birthDate);
+        this.birthdate = checkNotNull(birthdate);
     }
 
     private boolean tooFarPast(LocalDate birthDate) {
@@ -48,7 +47,7 @@ public class UserInfo implements ValueObject<UserInfo> {
     public boolean sameValueAs(UserInfo other) {
         return Objects.equals(firstName, other.firstName) &&
                 Objects.equals(lastName, other.lastName) &&
-                Objects.equals(birthDate, other.birthDate);
+                Objects.equals(birthdate, other.birthdate);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class UserInfo implements ValueObject<UserInfo> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, birthDate);
+        return Objects.hash(firstName, lastName, birthdate);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class UserInfo implements ValueObject<UserInfo> {
         return MoreObjects.toStringHelper(this)
                 .add("firstName", firstName)
                 .add("lastName", lastName)
-                .add("birthDate", birthDate)
+                .add("birthdate", birthdate)
                 .toString();
     }
 }

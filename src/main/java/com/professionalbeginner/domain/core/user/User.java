@@ -4,7 +4,6 @@ import com.professionalbeginner._other.ddd.Entity;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -43,7 +42,7 @@ public class User implements Entity<User> {
     }
 
     private void checkIfInLegalAge(UserInfo info) {
-        if (notInLegalAge(info.birthDate)) {
+        if (notInLegalAge(info.birthdate)) {
             throw new IllegalUserException("User not in legal age: " + info, info);
         }
     }
