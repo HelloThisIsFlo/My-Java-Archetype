@@ -18,6 +18,10 @@ public class IllegalReviewException extends RuntimeException {
         super(message);
     }
 
+    public IllegalReviewException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public Review getReview() {
         return review;
     }

@@ -1,9 +1,12 @@
 package com.professionalbeginner.data.inmemory;
 
+import com.professionalbeginner._other.spring.Dev;
+import com.professionalbeginner._other.spring.Prod;
 import com.professionalbeginner.domain.core.user.User;
 import com.professionalbeginner.domain.core.user.UserId;
 import com.professionalbeginner.domain.interfacelayer.repository.UserNotFoundException;
 import com.professionalbeginner.domain.interfacelayer.repository.UserRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +18,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Kempenich Florian
  */
+@Prod
+@Dev
+@Repository
 public class InMemoryUserRepository implements UserRepository {
 
     private Map<UserId, User> store = new HashMap<>();
