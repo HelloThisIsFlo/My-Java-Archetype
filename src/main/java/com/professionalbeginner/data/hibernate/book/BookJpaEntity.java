@@ -1,4 +1,4 @@
-package com.professionalbeginner.data.hibernate.model;
+package com.professionalbeginner.data.hibernate.book;
 
 import com.google.common.base.MoreObjects;
 
@@ -13,7 +13,6 @@ import java.util.List;
 public class BookJpaEntity {
 
     @Id
-
     @GeneratedValue
     private Long id;
 

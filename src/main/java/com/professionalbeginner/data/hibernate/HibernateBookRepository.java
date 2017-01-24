@@ -1,6 +1,7 @@
 package com.professionalbeginner.data.hibernate;
 
-import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
+import com.professionalbeginner.data.hibernate.book.BookJpaEntity;
+import com.professionalbeginner.data.hibernate.book.BookJpaMapper;
 import com.professionalbeginner.data.hibernate.springdata.HibernateCrudBookRepository;
 import com.professionalbeginner.domain.core.book.Book;
 import com.professionalbeginner.domain.core.book.BookId;
@@ -23,11 +24,11 @@ import java.util.List;
 @Repository
 public class HibernateBookRepository implements BookRepository {
 
-    private final JpaMapper jpaMapper;
+    private final BookJpaMapper jpaMapper;
     private final HibernateCrudBookRepository hibernateCrudBookRepository;
 
     @Autowired
-    public HibernateBookRepository(JpaMapper jpaMapper, HibernateCrudBookRepository hibernateCrudBookRepository) {
+    public HibernateBookRepository(BookJpaMapper jpaMapper, HibernateCrudBookRepository hibernateCrudBookRepository) {
         this.jpaMapper = jpaMapper;
         this.hibernateCrudBookRepository = hibernateCrudBookRepository;
     }

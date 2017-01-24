@@ -1,4 +1,4 @@
-package com.professionalbeginner.data.hibernate.model;
+package com.professionalbeginner.data.hibernate.book;
 
 import com.google.common.base.MoreObjects;
 
@@ -13,7 +13,7 @@ public class ReviewJpaEntity {
 
     @Id
     @GeneratedValue
-    private Long id; //todo remove ?? (maybe not actually)
+    private Long id;
 
     @ManyToOne()
     @JoinColumn(name = "book_id")

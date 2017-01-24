@@ -30,10 +30,8 @@ import static org.junit.Assert.*;
 public class HibernateBookRepositoryIntegrationTest {
 
     // TODO: 12/10/2016 Also implement integration tests on service, or even controller
-
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private TestUtils testUtils;
 

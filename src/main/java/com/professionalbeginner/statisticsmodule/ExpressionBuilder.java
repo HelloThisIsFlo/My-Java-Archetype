@@ -33,12 +33,12 @@ public class ExpressionBuilder {
         return method + "(" + parameters + ")";
     }
 
-    private void appendExtraParameters(String parameter) {
-        this.parameters = parameters + ", " + parameter;
-    }
-
     private void appendFirstParameter(String parameter) {
         this.parameters = parameter;
+    }
+
+    private void appendExtraParameters(String parameter) {
+        this.parameters = parameters + ", " + parameter;
     }
 
     private boolean fistParameter() {

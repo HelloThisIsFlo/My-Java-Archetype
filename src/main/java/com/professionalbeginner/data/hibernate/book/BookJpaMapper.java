@@ -1,9 +1,6 @@
-package com.professionalbeginner.data.hibernate;
+package com.professionalbeginner.data.hibernate.book;
 
-import com.professionalbeginner.data.hibernate.model.BookJpaEntity;
-import com.professionalbeginner.data.hibernate.model.ReviewJpaEntity;
 import com.professionalbeginner.domain.core.book.*;
-import com.professionalbeginner.domain.core.book.Rating;
 import com.professionalbeginner.domain.core.user.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +13,9 @@ import java.util.stream.Collectors;
  * @author Kempenich Florian
  */
 @Component
-public class JpaMapper {
+public class BookJpaMapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JpaMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BookJpaMapper.class);
 
     public BookJpaEntity map(Book book) {
         BookJpaEntity jpaBook = new BookJpaEntity(
@@ -36,6 +33,39 @@ public class JpaMapper {
         }
 
         return jpaBook;
+    }
+
+    private List<ReviewJpaEntity> mapAllToORM(List<Review> reviews, BookJpaEntity bookJpaEntity) {
+        return reviews.stream()
+                .map(review -> map(review, bookJpaEntity))
+                .collect(Collectors.toList());
+    }
+
+    public ReviewJpaEntity map(Review review, BookJpaEntity book) {
+        ReviewJpaEntity jpaEntity = new ReviewJpaEntity(
+                book,
+                review.getRating().value(),
+                review.getReviewer().username()
+        );
+        return jpaEntity;
+    }
+
+    public BookId mapId(BookJpaEntity jpaBook) {
+        return new BookId(jpaBook.getId());
+    }
+
+    public Review map(ReviewJpaEntity reviewJpaEntity) {
+        BookId bookId = new BookId(reviewJpaEntity.getBook().getId());
+        UserId reviewer = new UserId(reviewJpaEntity.getReviewer());
+        Rating rating = new Rating(reviewJpaEntity.getRating());
+
+        return new Review(bookId, reviewer, rating);
+    }
+
+    public List<Book> mapAllToDomain(List<BookJpaEntity> jpaEntities, boolean withReviews) {
+        return jpaEntities.stream()
+                .map(bookJpa -> map(bookJpa, withReviews))
+                .collect(Collectors.toList());
     }
 
     public Book map(BookJpaEntity bookJpaEntity, boolean withReviews) {
@@ -61,43 +91,10 @@ public class JpaMapper {
         return book;
     }
 
-    public BookId mapId(BookJpaEntity jpaBook) {
-        return new BookId(jpaBook.getId());
-    }
-
     private void addAllReviews(Book book, List<ReviewJpaEntity> reviewJpaEntities) {
         reviewJpaEntities.stream()
                 .map(this::map)
                 .forEach(book::addReview);
-    }
-
-    public ReviewJpaEntity map(Review review, BookJpaEntity book) {
-        ReviewJpaEntity jpaEntity = new ReviewJpaEntity(
-                book,
-                review.getRating().value(),
-                review.getReviewer().username()
-        );
-        return jpaEntity;
-    }
-
-    public Review map(ReviewJpaEntity reviewJpaEntity) {
-        BookId bookId = new BookId(reviewJpaEntity.getBook().getId());
-        UserId reviewer = new UserId(reviewJpaEntity.getReviewer());
-        Rating rating = new Rating(reviewJpaEntity.getRating());
-
-        return new Review(bookId, reviewer, rating);
-    }
-
-    private List<ReviewJpaEntity> mapAllToORM(List<Review> reviews, BookJpaEntity bookJpaEntity) {
-        return reviews.stream()
-                .map(review -> map(review, bookJpaEntity))
-                .collect(Collectors.toList());
-    }
-
-    public List<Book> mapAllToDomain(List<BookJpaEntity> jpaEntities, boolean withReviews) {
-        return jpaEntities.stream()
-                .map(bookJpa -> map(bookJpa, withReviews))
-                .collect(Collectors.toList());
     }
 }
 
