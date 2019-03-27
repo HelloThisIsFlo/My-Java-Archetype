@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/javaarchetype
+    url: jdbc:postgresql://localhost:1234/javaarchetype
     username: dev
     password: dev
 
