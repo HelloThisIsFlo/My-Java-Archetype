@@ -1,6 +1,6 @@
 # My Java Archetype
 
-Example of 'My Java Archetype' as described on 'The Professional Beginner'.
+Example of 'My Java Archetype' as described on my Blog 'Florian Kempenich'.
 
 > To know more about what this Archetype is about, check out my article:
 >
